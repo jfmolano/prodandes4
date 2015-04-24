@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ul class="nav nav-pills">
+  <li ng-class="{active:toolbarConsultaProductoCtrl.isSelected(1)}" >
+    <a href ng-click="toolbarConsultaProductoCtrl.selectTab(1)">Rango en Inventario</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaProductoCtrl.isSelected(2)}" >
+    <a href ng-click="toolbarConsultaProductoCtrl.selectTab(2)">Etapa</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaProductoCtrl.isSelected(3)}" >
+    <a href ng-click="toolbarConsultaProductoCtrl.selectTab(3)">Fecha de Solicitud</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaProductoCtrl.isSelected(4)}">
+    <a href ng-click="toolbarConsultaProductoCtrl.selectTab(4)">Fecha de Entrega</a>
+  </li>
+</ul>

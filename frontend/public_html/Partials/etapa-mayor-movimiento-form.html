@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<form name="etapaMayorMovimientoForm" ng-submit="etapaMayorMovimientoForm.$valid && etapaMayorMovimientoCtrl.enviarConsulta(this.etapaMayorMovimientoCtrl.consulta)" validate>
+    <h2 class="form-title">Entrega con mayor movimiento en un rango de fechas</h2>
+    <div class="row">
+
+        <div class="col-md-6" style="margin-top:50px">
+            <label>Fecha de Inicio:</label>
+            <input ng-model="this.etapaMayorMovimientoCtrl.consulta.fechaInicio" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6" style="margin-top:50px">
+            <label>Fecha de Fin:</label>
+            <input ng-model="this.etapaMayorMovimientoCtrl.consulta.fechaFin" type="date" class="form-control" required/>
+        </div>
+
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-warning">
+        </div>
+    </div>
+
+</div>
+
+
+
+</form>

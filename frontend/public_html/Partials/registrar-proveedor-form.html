@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+    <form name="registrarProveedorForm" ng-submit="registrarProveedorForm.$valid && registrarProveedorCtrl.addProveedor(this.registrarProveedorCtrl.proveedor)" validate>
+        <h2 class="form-title">Registrar Proveedor</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Documento:</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.documento" type="text" class="form-control" required/>
+            </div>
+            <div class="col-md-6">
+                <label>Nombre:</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.nombre" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Ciudad:</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.ciudad" type="text" class="form-control" required/>
+            </div>
+            <div class="col-md-6">
+                <label>Direccion:</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.direccion" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Teléfono:</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.telefono" type="text" class="form-control" required/>
+            </div>
+            <div class="col-md-6">
+                <label>Volúmen máximo</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.volumenMaximo" type="number" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Tiempo de entrega</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.tiempoDeEntrega" type="number" class="form-control" required/>
+            </div>
+            <div class="col-md-6">
+                <label>Representante legal</label>
+                <input ng-model="this.registrarProveedorCtrl.proveedor.representanteLegal" type="number" class="form-control" required/>
+            </div>
+        </div>
+
+        <input type="submit" value="submit" class="btn btn-default">
+    </form>

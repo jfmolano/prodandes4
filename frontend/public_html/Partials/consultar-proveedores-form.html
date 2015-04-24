@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<br></br>
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(1)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'Documento Id')" validate>
+    <br>
+    <h2 class="form-title">Consultar Proveedores Por Documento de Identidad</h2>
+    <br></br>
+    <div class="row" >
+
+        <div class="col-md-6">
+            <label>Documento de Identificacion:</label>
+            <input ng-model="this.consultarProveedoresCtrl.consulta.documentoId" type="text" class="form-control" required/>
+        </div>
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+</div>
+
+
+
+</form>
+</div>
+
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(2)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'Nombre')" validate>
+        <br></br>
+        <h2 class="form-title">Consultar Proveedores Por Nombre</h2>
+        <br></br>
+        <div class="row" >
+
+            <div class="col-md-6">
+                <label>Nombre:</label>
+                <input ng-model="this.consultarProveedoresCtrl.consulta.nombre" type="text" class="form-control" required/>
+            </div>
+            <div class="col-md-6" align="center" style="margin-top:50px">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(3)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'Ciudad')" validate>
+        <br></br>
+        <h2 class="form-title">Consultar Proveedores Por Ciudad</h2>
+        <br></br>
+        <div class="row" >
+
+            <div class="col-md-6">
+                <label>Ciudad:</label>
+                <input ng-model="this.consultarProveedoresCtrl.consulta.ciudad" type="text" class="form-control" required/>
+            </div>
+            <div class="col-md-6" align="center" style="margin-top:50px">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(4)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'Direccion')" validate>
+    <br></br>
+        <h2 class="form-title">Consultar Proveedores Por Direccion</h2>
+        <br></br>
+        <div class="row" >
+
+            <div class="col-md-6">
+                <label>Direccion:</label>
+                <input ng-model="this.consultarProveedoresCtrl.consulta.direccion" type="text" class="form-control" required/>
+            </div>
+            <div class="col-md-6" align="center" style="margin-top:50px">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(5)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'Telefono')" validate>
+    <br></br>
+        <h2 class="form-title">Consultar Proveedores Por Telefono</h2>
+        <br></br>
+        <div class="row" >
+
+            <div class="col-md-6">
+                <label>Telefono:</label>
+                <input ng-model="this.consultarProveedoresCtrl.consulta.telefono" type="text" class="form-control" required/>
+            </div>
+            <div class="col-md-6" align="center" style="margin-top:50px">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(6)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'volumen maximo')" validate>
+    <br></br>
+        <h2 class="form-title">Consultar Proveedores Por Volumen Maximo</h2>
+        <br></br>
+        <div class="row" >
+
+            <div class="col-md-6">
+                <label>Volumen Maximo:</label>
+                <input ng-model="this.consultarProveedoresCtrl.consulta.volumen_maximo" type="number" class="form-control" required/>
+            </div>
+            <div class="col-md-6" align="center" style="margin-top:50px">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(7)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'Tiempo Entrega')" validate>
+    <br></br>
+        <h2 class="form-title">Consultar Proveedores Por Tiempo de Entrega</h2>
+        <br></br>
+        <div class="row" >
+
+            <div class="col-md-6">
+                <label>Tiempo Entrega:</label>
+                <input ng-model="this.consultarProveedoresCtrl.consulta.tiempo_de_entrega" type="number" class="form-control" required/>
+            </div>
+            <div class="col-md-6" align="center" style="margin-top:50px">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaProveedoresCtrl.isSelected(8)" >
+    <form name="consultarProveedoresForm" ng-submit="consultarProveedoresForm.$valid && consultarProveedoresCtrl.enviarConsulta(this.consultarProveedoresCtrl.consulta
+    ,'Representante Legal')" validate>
+    <br></br>
+        <h2 class="form-title">Consultar Proveedores Por Representante Legal</h2>
+        <br></br>
+        <div class="row" >
+
+            <div class="col-md-6">
+                <label>Identificacion Representante Legal:</label>
+                <input ng-model="this.consultarProveedoresCtrl.consulta.representante_legal" type="number" class="form-control" required/>
+            </div>
+            <div class="col-md-6" align="center" style="margin-top:50px">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<div ng-if="consultarProveedoresCtrl.isFull()">
+    <lista-proveedores-consulta listaProveedoresConsulta></lista-proveedores-consulta>
+</div>
+
+<div ng-if="consultarProveedoresCtrl.isSelected()">
+    <ver-proveedor-form verProveedorForm></ver-proveedor-form>
+</div>

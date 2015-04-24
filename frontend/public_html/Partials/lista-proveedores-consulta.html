@@ -1,0 +1,36 @@
+<h2 class="form-title">Proveedores encontrados</h2>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Proveedores</div>
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Documento Id</th>
+            <th>Nombre</th>
+            <th>Ciudad</th>
+            <th>Direccion</th>
+            <th>Telefono</th>
+            <th>Volumen Maximo</th>
+            <th>Tiempo De Entrega</th>
+            <th>Representante Legal</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="proveedor in consultarProveedoresCtrl.proveedores">
+            <td>{{proveedor.documento_id}}</td>
+            <td>{{proveedor.nombre}}</td>
+            <td>{{proveedor.ciudad}}</td>
+            <td>{{proveedor.direccion}}</td>
+            <td>{{proveedor.telefono}}</td>
+            <td>{{proveedor.volumen_maximo}}</td>
+            <td>{{proveedor.tiempo_de_entrega}}</td>
+            <td>{{proveedor.representante_legal}}</td>
+            <td>
+                <input ng-click="consultarProveedoresCtrl.verProveedor(proveedor.documento_id)" value="Ver" class="btn btn-warning">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div> 

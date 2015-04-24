@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<div ng-if="toolbarConsultaSuministrosCtrl.isSelected(1)">
+    <form name="consultarMateriasForm" ng-submit="consultarMateriasForm.$valid && consultarMateriasCtrl.enviarConsulta(this.consultarMateriasCtrl.consulta
+    ,'Rango')" validate>
+    <h2 class="form-title">Consultar Materias Primas Por Rango de Existencias</h2>
+    <div class="row">
+
+        <div class="col-md-4">
+            <label>Rango 1:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.Rango1" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-4">
+            <label>Rango 2:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.Rango2" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-4">
+            <label>Orden:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-default">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaSuministrosCtrl.isSelected(2)">
+    <form name="consultarMateriasForm" ng-submit="consultarMateriasForm.$valid && consultarMateriasCtrl.enviarConsulta(this.consultarMateriasCtrl.consulta
+    ,'Tipo_material')" validate>
+    <h2 class="form-title">Consultar Materias Primas por Tipo de Material</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Tipo:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.Tipo_material" type="text" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Orden:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaSuministrosCtrl.isSelected(3)">
+    <form name="consultarMateriasForm" ng-submit="consultarMateriasForm.$valid && consultarMateriasCtrl.enviarConsulta(this.consultarMateriasCtrl.consulta
+    ,'Fecha solicitud')" validate>
+    <h2 class="form-title">Consultar Materias Primas por Fecha de Solicitud</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Fecha de Solicitud:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.fecha_solicitud" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Orden:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaSuministrosCtrl.isSelected(4)">
+    <form name="consultarMateriasForm" ng-submit="consultarMateriasForm.$valid && consultarMateriasCtrl.enviarConsulta(this.consultarMateriasCtrl.consulta
+    ,'Fecha entrega')" validate>
+    <h2 class="form-title">Consultar Materias Primas por Fecha de Entrega</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Fecha de Entrega:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.fecha_entrega" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Orden:</label>
+            <input ng-model="this.consultarMateriasCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="consultarMateriasCtrl.isFull()">
+    <lista-materias-consulta listaMateriasConsulta></lista-materias-consulta>
+</div>

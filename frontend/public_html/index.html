@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="ProdAndes">
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+</head>
+<body>
+    <div>TODO write content</div>
+    {{4+5}}
+    <toolbar></toolbar> 
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar" style="background-color:#222">
+            <navegacion></navegacion> 
+        </div>
+        
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(1)">            
+            <registrar-pedido-form registarPedidoForm></registrar-pedido-form>            
+        </div>
+        
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(2)">
+
+            <registrar-entrega-pedido-form registarPedidoForm></registrar-entrega-pedido-form>
+            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(3)" >      
+            <toolbar-consulta-producto></toolbar-consulta-producto>
+            <consultar-productos-form consultarProductosForm></consultar-productos-form>  
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(4)" >      
+            <toolbar-consulta-suministros></toolbar-consulta-suministros>
+            <consultar-materias-form consultarMateriasForm></consultar-materias-form>  
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(5)" >      
+            <toolbar-consulta-suministros></toolbar-consulta-suministros>
+            <consultar-componentes-form consultarComponentesForm></consultar-componentes-form>  
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(6)">
+
+            <registrar-proveedor-form registarProveedorForm></registrar-proveedor-form>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(7)">
+
+            <registrar-llegada-material-form registrarLlegadaMaterialForm></registrar-llegada-material-form>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(8)">
+
+            <registrar-llegada-componente-form registrarLlegadaComponenteForm></registrar-llegada-componente-form>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(9)">
+            <registrar-ejecucion-etapa-form registrarEjecucionEtapaForm></registrar-ejecucion-etapa-form>            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(10)">
+            
+            <etapa-mayor-movimiento-form etapaMayorMovimientoForm></etapa-mayor-movimiento-form>            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(11)">
+            <operario-mas-activo-form operarioMasActivoForm></operario-mas-activo-form>            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(12)">
+            <toolbar-consulta-pedidos></toolbar-consulta-pedidos>            
+            <consultar-pedidos-form consultarPedidosForm></consultar-pedidos-form>            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(13)">
+            <toolbar-consulta-proveedores></toolbar-consulta-proveedores>            
+            <consultar-proveedores-form consultarProveedoresForm></consultar-proveedores-form>            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(14)" >      
+            <toolbar-consulta-clientes></toolbar-consulta-clientes>
+            <consultar-clientes-form consultarClientesForm></consultar-clientes-form>  
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(15)">
+            <activar-estacion-form activarEstacionForm></activar-estacion-form >            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(16)">
+            <desactivar-estacion-form desactivarEstacionForm></desactivar-estacion-form >            
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/AngularControllers/app.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/docs.min.js"></script>
+<script type="text/javascript" src="js/npm.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+
+</body>
+</html>

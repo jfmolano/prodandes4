@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<div ng-if="toolbarConsultaProductoCtrl.isSelected(1)" >
+    <form name="consultarProductosForm" ng-submit="consultarProductosForm.$valid && consultarProductosCtrl.enviarConsulta(this.consultarProductosCtrl.consulta
+    ,'Rango')" validate>
+    <h2 class="form-title">Consultar Productos Por Rango de Existencias</h2>
+    <div class="row" >
+
+        <div class="col-md-4">
+            <label>Rango 1:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.Rango1" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-4">
+            <label>Rango 2:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.Rango2" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-4">
+            <label>Orden:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+</div>
+
+
+
+</form>
+</div>
+
+<div ng-if="toolbarConsultaProductoCtrl.isSelected(2)">
+    <form name="consultarProductosForm" ng-submit="consultarProductosForm.$valid && consultarProductosCtrl.enviarConsulta(this.consultarProductosCtrl.consulta
+    ,'Etapa')" validate>
+    <h2 class="form-title">Consultar Productos Etapa</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Etapa:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.Etapa" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Orden:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaProductoCtrl.isSelected(3)">
+    <form name="consultarProductosForm" ng-submit="consultarProductosForm.$valid && consultarProductosCtrl.enviarConsulta(this.consultarProductosCtrl.consulta
+    ,'Fecha solicitud')" validate>
+    <h2 class="form-title">Consultar Productos por Fecha de Solicitud</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Fecha de Solicitud:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.fecha_solicitud" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Orden:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaProductoCtrl.isSelected(4)">
+    <form name="consultarProductosForm" ng-submit="consultarProductosForm.$valid && consultarProductosCtrl.enviarConsulta(this.consultarProductosCtrl.consulta
+    ,'Fecha entrega')" validate>
+    <h2 class="form-title">Consultar Productos por Fecha de Entrega</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Fecha de Entrega:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.fecha_entrega" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Orden:</label>
+            <input ng-model="this.consultarProductosCtrl.consulta.order" type="text" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="consultarProductosCtrl.isFull()">
+    <lista-productos-consulta listaProductosConsulta></lista-productos-consulta>
+</div>

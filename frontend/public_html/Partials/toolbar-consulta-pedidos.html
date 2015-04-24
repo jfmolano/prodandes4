@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<ul class="nav nav-pills">
+  <li ng-class="{active:toolbarConsultaPedidosCtrl.isSelected(1)}" >
+    <a href ng-click="toolbarConsultaPedidosCtrl.selectTab(1);consultarPedidosCtrl.limpiarSelected()">Rango de cantidad</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaPedidosCtrl.isSelected(2)}" >
+    <a href ng-click="toolbarConsultaPedidosCtrl.selectTab(2);consultarPedidosCtrl.limpiarSelected()">Estado</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaPedidosCtrl.isSelected(3)}" >
+    <a href ng-click="toolbarConsultaPedidosCtrl.selectTab(3);consultarPedidosCtrl.limpiarSelected()">Fecha de Solicitud</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaPedidosCtrl.isSelected(4)}">
+    <a href ng-click="toolbarConsultaPedidosCtrl.selectTab(4);consultarPedidosCtrl.limpiarSelected()">Fecha de Entrega</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaPedidosCtrl.isSelected(5)}">
+    <a href ng-click="toolbarConsultaPedidosCtrl.selectTab(5);consultarPedidosCtrl.limpiarSelected()">Fecha Esperada de Entrega</a>
+  </li>
+  <li ng-class="{active:toolbarConsultaPedidosCtrl.isSelected(6)}">
+    <a href ng-click="toolbarConsultaPedidosCtrl.selectTab(6);consultarPedidosCtrl.limpiarSelected()">Id de Cliente</a>
+  </li>
+</ul>
+

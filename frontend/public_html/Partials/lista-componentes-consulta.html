@@ -1,0 +1,25 @@
+<h2 class="form-title">Componentes encontrados</h2>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Items de Componentes</div>
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Estado</th>
+            <th>Componente</th>
+            <th>Id Pedido</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="componentes in consultarComponentesCtrl.componentes | orderBy: consultarComponentesCtrl.order">
+            <td>{{componentes.Id}}</td>
+            <td>{{componentes.Estado}}</td>
+            <td>{{componentes.Componente}}</td>
+            <td>{{componentes.IdPedido}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div> 

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<br></br>
+<div ng-if="toolbarConsultaPedidosCtrl.isSelected(1)" >
+    <form name="consultarPedidosForm" ng-submit="consultarPedidosForm.$valid && consultarPedidosCtrl.enviarConsulta(this.consultarPedidosCtrl.consulta
+    ,'Cantidad')" validate>
+    <br>
+    <h2 class="form-title">Consultar Pedidos Por Rango de Cantidad de Productos</h2>
+    <br>
+    <div class="row" >
+
+        <div class="col-md-6">
+            <label>Rango 1:</label>
+            <input ng-model="this.consultarPedidosCtrl.consulta.Rango1" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Rango 2:</label>
+            <input ng-model="this.consultarPedidosCtrl.consulta.Rango2" type="number" class="form-control" required/>
+        </div>
+        
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+</div>
+
+
+
+</form>
+</div>
+
+
+
+<div ng-if="toolbarConsultaPedidosCtrl.isSelected(2)">
+    <form name="consultarPedidosForm" ng-submit="consultarPedidosForm.$valid && consultarPedidosCtrl.enviarConsulta(this.consultarPedidosCtrl.consulta
+    ,'Estado')" validate>
+    <br>
+    <h2 class="form-title">Consultar Pedidos Por Estado</h2>
+    <br>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Estado:</label>
+            <input ng-model="this.consultarPedidosCtrl.consulta.Estado" type="text" class="form-control" required/>
+        </div>
+        
+    </div>
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaPedidosCtrl.isSelected(3)">
+    <form name="consultarPedidosForm" ng-submit="consultarPedidosForm.$valid && consultarPedidosCtrl.enviarConsulta(this.consultarPedidosCtrl.consulta
+    ,'Fecha Solicitud')" validate>
+    <br>
+    <h2 class="form-title">Consultar Pedidos por Fecha de Solicitud</h2>
+    <br>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Fecha de Solicitud:</label>
+            <input ng-model="this.consultarPedidosCtrl.consulta.fecha_solicitud" type="date" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaPedidosCtrl.isSelected(4)">
+    <form name="consultarPedidosForm" ng-submit="consultarPedidosForm.$valid && consultarPedidosCtrl.enviarConsulta(this.consultarPedidosCtrl.consulta
+    ,'Fecha Entrega')" validate>
+    <br>
+    <h2 class="form-title">Consultar Pedidos por Fecha de Entrega</h2>
+    <br>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Fecha de Entrega:</label>
+            <input ng-model="this.consultarPedidosCtrl.consulta.fecha_entrega" type="date" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaPedidosCtrl.isSelected(5)">
+    <form name="consultarPedidosForm" ng-submit="consultarPedidosForm.$valid && consultarPedidosCtrl.enviarConsulta(this.consultarPedidosCtrl.consulta
+    ,'Fecha Esperada Entrega')" validate>
+    <br>
+    <h2 class="form-title">Consultar Pedidos por Fecha Esperada de Entrega</h2>
+    <br>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Fecha Esperada de Entrega:</label>
+            <input ng-model="this.consultarPedidosCtrl.consulta.fecha_esperada_entrega" type="date" class="form-control" required/>
+        </div>
+    </div>
+
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="toolbarConsultaPedidosCtrl.isSelected(6)">
+    <form name="consultarPedidosForm" ng-submit="consultarPedidosForm.$valid && consultarPedidosCtrl.enviarConsulta(this.consultarPedidosCtrl.consulta
+    ,'Id Cliente')" validate>
+    <br>
+    <h2 class="form-title">Consultar Pedidos Por Id de Cliente</h2>
+    <br>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Id Cliente:</label>
+            <input ng-model="this.consultarPedidosCtrl.consulta.id_cliente" type="number" class="form-control" required/>
+        </div>
+        
+    </div>
+
+    <input type="submit" value="submit" class="btn btn-success">
+</form>
+</div>
+
+<div ng-if="consultarPedidosCtrl.isFull()">
+    <br>
+    <lista-pedidos-consulta listaPedidosConsulta></lista-pedidos-consulta>
+</div>
+
+<div ng-if="consultarPedidosCtrl.isSelected()">
+    <br>
+    <ver-pedido-form verPedidoForm></ver-pedido-form>
+</div>

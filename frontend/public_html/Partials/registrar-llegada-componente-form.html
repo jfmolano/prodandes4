@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+    <form name="registrarLlegadaComponenteForm" ng-submit="registrarLlegadaComponenteForm.$valid && registrarLlegadaComponenteCtrl.addLlegadaComponente(this.registrarLlegadaComponenteCtrl.llegada)" validate>
+        <h2 class="form-title">Registrar Llegada de Componente</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <label>id pedido</label>
+                <input ng-model="this.registrarLlegadaComponenteCtrl.llegada.id" type="text" class="form-control" required/>
+            </div>
+        </div>
+        <input type="submit" value="submit" class="btn btn-default">
+    </form>

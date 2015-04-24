@@ -1,0 +1,34 @@
+      <h2 class="form-title">Clientes encontrados</h2>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Clientes</div>
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Ciudad</th>
+            <th>Dirección</th>
+            <th>Telefono</th>
+            <th>Id pedido</th>
+            <th>Fecha solicitud</th>
+            <th>Fecha esperada de entrega</th>
+            <th>Fecha de entrega</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="clientes in consultarClientesCtrl.clientes">
+            <td style="background-color: #8FAF91;">{{clientes.nombre}}</td>
+            <td style="background-color: #8FAF91;">{{clientes.ciudad}}</td>
+            <td style="background-color: #8FAF91;">{{clientes.direccion}}</td>
+            <td style="background-color: #8FAF91;">{{clientes.telefono}}</td>
+            <td style="background-color: #ACD5AF;">{{clientes.id}}</td>
+            <td style="background-color: #ACD5AF;">{{clientes.fecha_solicitud}}</td>
+            <td style="background-color: #ACD5AF;">{{clientes.fecha_esperada_entrega}}</td>
+            <td style="background-color: #ACD5AF;">{{clientes.fecha_entrega}}</td>
+            <td style="background-color: #ACD5AF;">{{clientes.estado}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div> 

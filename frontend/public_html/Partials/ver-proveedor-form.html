@@ -1,0 +1,35 @@
+<div ng-repeat="c in consultarProveedoresCtrl.proveedorSelected">
+	<h3>Documento de Identidad</h3>
+	<div style="padding-left:3em"><h4>{{c.documento_id}}</h4></div>
+	<h3>Nombre</h3>
+	<div style="padding-left:3em"><h4>{{c.nombre}}</h4></div>
+	<h3>Direccion</h3>
+	<div style="padding-left:3em"><h4>{{c.direccion}}</h4></div>
+	<h3>Ciudad</h3>
+	<div style="padding-left:3em"><h4>{{c.ciudad}}</h4></div>
+	<h3>Telefono</h3>
+	<div style="padding-left:3em"><h4>{{c.telefono}}</h4></div>
+	<h3>Volumen Maximo</h3>
+	<div style="padding-left:3em"><h4>{{c.volumen_maximo}}</h4></div>
+	<h3>Tiempo de Entrega</h3>
+	<div style="padding-left:3em"><h4>{{c.tiempo_de_entrega}} dias</h4></div>
+	<h3>Representante Legal</h3>
+	<div style="padding-left:3em"><h4>{{c.representante_legal}}</h4></div>
+	<h3>Productos que dependen del proveedor</h3>
+	<div ng-repeat="p in c.productos">
+		<div style="padding-left:3em"><h4>Producto: {{p.id_producto}}</h4></div>
+		<div style="padding-left:5em"><h4>Cantidad: {{p.cantidad_unidades}}</h4></div>
+	</div>
+	<h3>Materias Primas que provee</h3>
+	<div ng-repeat="p in c.materias_primas">
+		<div style="padding-left:3em"><h4>Materia Prima: {{p.nombre}}</h4></div>
+		<div style="padding-left:5em"><h4>Unidad de medida: {{p.u_medida}}</h4></div>
+		<div style="padding-left:5em"><h4>Tipo: {{p.tipo}}</h4></div>
+	</div>
+	<h3>Componentes que provee</h3>
+	<div ng-repeat="p in c.componentes">
+		<div style="padding-left:3em"><h4>Componente: {{p.nombre}}</h4></div>
+		<div style="padding-left:5em"><h4>Tipo: {{p.tipo}}</h4></div>
+	</div>
+
+</div>

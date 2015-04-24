@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<form name="registrarPedidoForm" ng-submit="registrarPedidoForm.$valid && registrarPedidoCtrl.addPedido(this.registrarPedidoCtrl.pedido)" validate>
+
+    <h2 class="form-title" >Registrar Pedido</h2>
+    <div class="row">
+        <div class="col-md-6" style="margin-top:50px">
+            <label>Producto:</label>
+            <input ng-model="this.registrarPedidoCtrl.pedido.nombre" type="text" class="form-control" required/>
+        </div>
+        <div class="col-md-6" style="margin-top:50px">
+            <label>Id Cliente:</label>
+            <input ng-model="this.registrarPedidoCtrl.pedido.id_cliente" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-6" style="margin-top:50px">
+            <label>Cantidad:</label>
+            <input ng-model="this.registrarPedidoCtrl.pedido.cantidad" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-6" style="margin-top:50px">
+            <label>Fecha Esperada de Entrega:</label>
+            <input ng-model="this.registrarPedidoCtrl.pedido.fechaEsperada" type="date" class="form-control" required/>
+        </div>
+
+        <div class="col-md-12" align="center" style="margin-top:50px">
+            <input type="submit" value="Registrar" class="btn btn-info">
+        </div>
+    </div>
+</form>
+<div ng-if="registrarPedidoCtrl.hayIdPedido()" style="margin-top:50px">
+    <form name="registrarPedidoForm" ng-submit="registrarPedidoForm.$valid && registrarPedidoCtrl.cancelPedido(this.registrarPedidoCtrl.id_pedido)" validate>
+        <div class="col-md-12" align="center">
+            <input type="submit" value="Cancelar Pedido" class="btn btn-danger">
+        </div>
+    </form>
+</div>

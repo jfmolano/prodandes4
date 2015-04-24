@@ -1,0 +1,39 @@
+<div ng-repeat="c in consultarPedidosCtrl.pedidoSelected">
+	<h3>ID</h3>
+	<div style="padding-left:3em"><h4>{{c.id}}</h4></div>
+	<h3>Estado</h3>
+	<div style="padding-left:3em"><h4>{{c.estado}}</h4></div>
+	<h3>Cliente</h3>
+	<div style="padding-left:3em"><h4>Nombre: {{c.cliente.nombre}}</h4></div>
+	<div style="padding-left:3em"><h4>Direccion: {{c.cliente.direccion}}</h4></div>
+	<div style="padding-left:3em"><h4>Ciudad: {{c.cliente.ciudad}}</h4></div>
+	<div style="padding-left:3em"><h4>Telefono: {{c.cliente.telefono}}</h4></div>
+	<div style="padding-left:3em"><h4>Numero de Registro: {{c.cliente.numero_registro}}</h4></div>
+	<div style="padding-left:3em"><h4>Representante Legal: {{c.cliente.representante_legal}}</h4></div>
+	<h3>Fecha De Solicitud</h3>
+	<div style="padding-left:3em"><h4>{{c.fecha_solicitud}}</h4></div>
+	<h3>Fecha Esperada De Entrega</h3>
+	<div style="padding-left:3em"><h4>{{c.fecha_esperada_entrega}}</h4></div>
+	<h3>Fecha De Entrega</h3>
+	<div style="padding-left:3em"><h4>{{c.fecha_entrega}}</h4></div>
+	<h3>Cantidad De Producto</h3>
+	<div style="padding-left:3em"><h4>{{c.cantidad_producto}}</h4></div>
+	<h3>Productos</h3>
+	<div ng-repeat="p in c.productos">
+		<div style="padding-left:3em"><h4>Producto: {{p.id}}</h4></div>
+		<div style="padding-left:5em"><h4>Nombre: {{p.nombre_producto}}</h4></div>
+		<div style="padding-left:5em"><h4>Estado: {{p.estado}}</h4></div>
+		<div style="padding-left:5em"><h4>Etapa: {{p.etapa}}</h4></div>
+		<div style="padding-left:5em"><h4>Costo: {{p.costo_de_venta}}</h4></div>
+	</div>
+	<h3>Materias Primas Necesarias</h3>
+	<div ng-repeat="p in c.materias_primas">
+		<div style="padding-left:3em"><h4>Materia Prima: {{p.materia}}</h4></div>
+		<div style="padding-left:5em"><h4>Cantidad: {{p.cantidad}}</h4></div>
+	</div>
+	<h3>Componentes Necesarios</h3>
+	<div ng-repeat="p in c.componentes">
+		<div style="padding-left:3em"><h4>Componente: {{p.componente}}</h4></div>
+		<div style="padding-left:5em"><h4>Cantidad: {{p.unidades}}</h4></div>
+	</div>
+</div>
