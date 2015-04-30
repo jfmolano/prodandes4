@@ -2547,6 +2547,49 @@ public class Prodandes {
 
     }
     
+    @POST
+    @Path("/consultarPedidosRFC11")
+    public JSONArray consultarPedidosRFC11(JSONObject jP) throws Exception {
+
+        JSONArray jArray = new JSONArray();
+        abrirConexion();
+        System.out.println("Parametro de consultarPedidosRFC11");
+        System.out.println(jP);
+        String material = jP.get("Material").toString();
+        System.out.println("Material: " + material);
+
+        String sql = "select * from PEDIDO_PRODUCTO " +
+        "where ID = (" +
+        "select ID from (" +
+        "select * from PEDIDO_PRODUCTO " +
+        "inner join PEDIDO_USA_MATERIA_PRIMA " +
+        "on ID = ID_PEDIDO) " +
+        "inner join MATERIA_PRIMA " +
+        "on NOMBRE = NOMBRE_MATERIA_PRIMA " +
+        "where NOMBRE = '"+material+"')";
+        
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(sql);
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+
+            JSONObject jObject = new JSONObject();
+            jObject.put("id", rs.getInt("id"));
+            jObject.put("fecha_esperada_entrega", rs.getDate("fecha_esperada_entrega"));
+            jObject.put("fecha_entrega", rs.getDate("fecha_entrega"));
+            jObject.put("estado", rs.getString("estado"));
+            jObject.put("cantidad_producto", rs.getInt("cantidad_producto"));
+            jObject.put("fecha_solicitud", rs.getDate("fecha_solicitud"));
+            jArray.add(jObject);
+        }
+        st.close();
+        cerrarConexion();
+        return jArray;
+
+    }
+    
     public void escribirEnLog(String instruccion)
     {
         try {
