@@ -38,6 +38,7 @@ import javax.ws.rs.GET;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -2790,11 +2791,20 @@ public class Prodandes implements MessageListener{
     public void onMessage(Message message) {
         try {
             TextMessage text = (TextMessage) message;
-            System.out.println("El mensaje de Jose fue: " + text.getText());
-            
-            if (text.getText().startsWith("RF18-")){
+            String respuesta = text.getText();
+            System.out.println("El mensaje de Jose fue: " + respuesta);
+            System.out.println("onMessage");
+            System.out.println(respuesta.startsWith("jp-pe"));
+            System.out.println(respuesta.equals("jp-pe"));
+            if (respuesta.startsWith("RF18-")){
                 
                 //TODO
+            }
+            else if(respuesta.equals("jp-pe"))
+            {
+                System.out.println("Entro a jp-pe");
+                Send env = new Send();
+                env.enviar(darEtapasCuentaJose());
             }
             
         } catch (Exception e) {
@@ -2816,5 +2826,60 @@ public class Prodandes implements MessageListener{
             return "Mal";
         }
         
+    }
+    
+    @GET
+    @Path("/darEtapasCuentaJose")
+    public String darEtapasCuentaJose() throws Exception {
+
+        JSONArray jArray = new JSONArray();
+        abrirConexion();
+        String sql = "select ESTACION_ID, count(*) as num_etapas from ETAPA_ESTACION group by ESTACION_ID";
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(sql);
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            JSONObject jObject = new JSONObject();
+            jObject.put("estacion_id", rs.getInt("estacion_id"));
+            jObject.put("num_etapas", rs.getInt("num_etapas"));
+            System.out.println(jObject);
+            jArray.add(jObject);
+        }
+        System.out.println(jArray);
+        st.close();
+        cerrarConexion();
+        JSONObject jObject = new JSONObject();
+        jObject.put("arreglo", jArray);
+        return "pj-r:"+jObject;
+    }
+    
+    @GET
+    @Path("/borrarRegEtapaEstacionJose/{id_etapa}/{id_estacion}")
+    public String borrarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId,@PathParam("id_estacion") int estacionId) throws Exception {
+        abrirConexion();
+        String sql = "DELETE FROM ETAPA_ESTACION WHERE ETAPA_ID="+etapaId+" AND ESTACION_ID="+estacionId;
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(sql);
+        Statement st = con.createStatement();
+        st.executeQuery(sql);
+        st.close();
+        cerrarConexion();
+        return "Bien";
+    }
+    
+    @GET
+    @Path("/insertarRegEtapaEstacionJose/{id_etapa}/{id_estacion}")
+    public String insertarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId,@PathParam("id_estacion") int estacionId) throws Exception {
+        abrirConexion();
+        String sql = "INSERT INTO ETAPA_ESTACION (ETAPA_ID,ESTACION_ID) VALUES ("+etapaId+","+estacionId+")";
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(sql);
+        Statement st = con.createStatement();
+        st.executeQuery(sql);
+        st.close();
+        cerrarConexion();
+        return "Bien";
     }
 }
