@@ -2798,11 +2798,12 @@ public class Prodandes implements MessageListener {
     public void onMessage(Message message) {
         try {
             TextMessage text = (TextMessage) message;
-            System.out.println("El mensaje de Jose fue: " + text.getText());
+            String txt = text.getText();
+            System.out.println("El mensaje de Jose fue: " + txt);
 
-            if (text.getText().startsWith("RF18-")) {
+            if (txt.startsWith("RF18-")) {
 
-                String[] params = text.getText().split("-");
+                String[] params = txt.split("-");
                 String[] fecha = params[1].split("/");
                 Calendar c = new GregorianCalendar(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]));
 
@@ -2819,9 +2820,9 @@ public class Prodandes implements MessageListener {
                 Send env = new Send();
                 env.enviar("RF18R-" + jO.get("id_pedido") + "-" + jO.get("Respuesta"));
 
-            } else if (text.getText().startsWith("RF18R-")) {
+            } else if (txt.startsWith("RF18R-")) {
 
-                buzon.add(text.getText().substring(6));
+                buzon.add(txt.substring(6));
             }
 
         } catch (Exception e) {
