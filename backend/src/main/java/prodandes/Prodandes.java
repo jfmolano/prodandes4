@@ -64,6 +64,7 @@ public class Prodandes implements MessageListener{
     private Session s;
     private Destination d;
     private MessageConsumer mc;
+    private ArrayList<String> buzon;
 
     // -------------------------------------------------
     // Requerimientos Funcionales
@@ -2790,6 +2791,12 @@ public class Prodandes implements MessageListener{
         try {
             TextMessage text = (TextMessage) message;
             System.out.println("El mensaje de Jose fue: " + text.getText());
+            
+            if (text.getText().startsWith("RF18-")){
+                
+                //TODO
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
