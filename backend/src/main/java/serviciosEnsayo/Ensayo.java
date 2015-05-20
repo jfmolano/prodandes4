@@ -29,6 +29,8 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import prodandes.Recibir;
+import prodandes.Send;
 /**
  *
  * @author Jonathan
@@ -57,6 +59,7 @@ public class Ensayo {
     env.put(Context.SECURITY_CREDENTIALS, "jboss1");
     return new InitialContext(env);
     } */
+    private Recibir rec;
     
     public void iniciar() throws NamingException, JMSException {
         InitialContext init = new InitialContext();
@@ -117,11 +120,27 @@ public class Ensayo {
     @GET
     @Path("/metodo3")
     public String metodo3() {
-
         try {
+             rec = new Recibir();/*
              iniciar();
              send("Ola ca estou eu!");
-             s.close();
+             s.close();*/
+             return "Bien";
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Mal";
+        }
+        
+    }
+    
+    
+    @GET
+    @Path("/metodo4")
+    public String metodo4() {
+        try {
+             Send env = new Send();
+             env.enviar("Mensaje de Jonathan y Francisco");
              return "Bien";
             
         } catch (Exception e) {
