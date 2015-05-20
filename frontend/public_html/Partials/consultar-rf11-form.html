@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<div ng-if="toolbarConsultaRf11Ctrl.isSelected(1)" >
+    <form name="consultarRf11Form" ng-submit="consultarRf11Form.$valid && consultarRf11Ctrl.enviarConsulta(this.consultarRf11Ctrl.consulta)" validate>
+    <h2 class="form-title">Consultar pedidos</h2>
+    <div class="row" >
+
+        <div class="col-md-6">
+            <label>Material</label>
+            <input ng-model="this.consultarRf11Ctrl.consulta.Material" type="text" class="form-control" required/>
+        </div>
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+</div>
+
+
+
+</form>
+</div>
+
+<div ng-if="consultarRf11Ctrl.isFull()">
+    <lista-rf11-consulta listaRf11Consulta></lista-rf11-consulta>
+</div>

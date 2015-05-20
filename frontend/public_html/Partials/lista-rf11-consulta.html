@@ -1,0 +1,28 @@
+      <h2 class="form-title">Pedidos encontrados</h2>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Pedidos</div>
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id pedido</th>
+            <th>Cantidad</th>
+            <th>Fecha solicitud</th>
+            <th>Fecha esperada de entrega</th>
+            <th>Fecha de entrega</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="pedidos in consultarRf11Ctrl.pedidos">
+            <td style="background-color: #ACD5AF;">{{pedidos.id}}</td>
+            <td style="background-color: #ACD5AF;">{{pedidos.cantidad_producto}}</td>
+            <td style="background-color: #ACD5AF;">{{pedidos.fecha_solicitud}}</td>
+            <td style="background-color: #ACD5AF;">{{pedidos.fecha_esperada_entrega}}</td>
+            <td style="background-color: #ACD5AF;">{{pedidos.fecha_entrega}}</td>
+            <td style="background-color: #ACD5AF;">{{pedidos.estado}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div> 

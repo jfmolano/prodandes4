@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<br></br>
+<div ng-if="toolbarConsultaEtapasCtrl.isSelected(1)" >
+    <form name="consultarEtapasForm" ng-submit="consultarEtapasForm.$valid && consultarEtapasCtrl.enviarConsulta(this.consultarEtapasCtrl.consulta
+    ,'materia prima')" validate>
+    <br>
+    <h2 class="form-title">Consultar Etapas Por Materia Prima</h2>
+    <br>
+    <div class="row" >
+
+        <div class="col-md-6">
+            <label>Fecha 1:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.fecha1" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Fecha 2:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.fecha2" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Materia Prima:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.valor" type="text" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Igualdad:</label>
+            <!--<input ng-model="this.consultarEtapasCtrl.consulta.igualdad" type="text" class="form-control" required/>-->
+            <select ng-model="this.consultarEtapasCtrl.consulta.igualdad" class="form-control" required>
+              <option value="SI">Si</option>
+              <option value="NO">No</option>
+            </select>
+        </div>
+        
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+    </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaEtapasCtrl.isSelected(2)" >
+    <form name="consultarEtapasForm" ng-submit="consultarEtapasForm.$valid && consultarEtapasCtrl.enviarConsulta(this.consultarEtapasCtrl.consulta
+    ,'tipo material')" validate>
+    <br>
+    <h2 class="form-title">Consultar Etapas Por Tipo Material</h2>
+    <br>
+    <div class="row" >
+
+        <div class="col-md-6">
+            <label>Fecha 1:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.fecha1" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Fecha 2:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.fecha2" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Tipo material:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.valor" type="text" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Igualdad:</label>
+            <select ng-model="this.consultarEtapasCtrl.consulta.igualdad" class="form-control" required>
+              <option value="SI">Si</option>
+              <option value="NO">No</option>
+            </select>
+        </div>
+        
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+    </div>
+    </form>
+</div>
+
+<div ng-if="toolbarConsultaEtapasCtrl.isSelected(3)" >
+    <form name="consultarEtapasForm" ng-submit="consultarEtapasForm.$valid && consultarEtapasCtrl.enviarConsulta(this.consultarEtapasCtrl.consulta
+    ,'pedido')" validate>
+    <br>
+    <h2 class="form-title">Consultar Etapas Por Pedido</h2>
+    <br>
+    <div class="row" >
+
+        <div class="col-md-6">
+            <label>Fecha 1:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.fecha1" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Fecha 2:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.fecha2" type="date" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Pedido:</label>
+            <input ng-model="this.consultarEtapasCtrl.consulta.valor" type="number" class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Igualdad:</label>
+            <select ng-model="this.consultarEtapasCtrl.consulta.igualdad" class="form-control" required>
+              <option value="SI">Si</option>
+              <option value="NO">No</option>
+            </select>
+        </div>
+        
+        <div class="col-md-6" align="center" style="margin-top:50px">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+    </div>
+    </form>
+</div>
+
+
+<div ng-if="consultarEtapasCtrl.isFull()">
+    <br>
+    <lista-etapas-consulta listaEtapasConsulta></lista-etapas-consulta>
+</div>
+

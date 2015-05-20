@@ -1,0 +1,31 @@
+<h2 class="form-title">Etapas encontradas</h2>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Etapas</div>
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id Etapa</th>
+            <th>Descripcion</th>
+            <th>Producto</th>
+            <th>Numero de Etapa</th>
+            <th>Materia prima</th>
+            <th>Tipo material</th>
+            <th>Pedido</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="c in consultarEtapasCtrl.etapas">
+            <td>{{c.id_etapa}}</td>
+            <td>{{c.descripcion}}</td>
+            <td>{{c.id_producto}}</td>
+            <td>{{c.numero_etapa}}</td>
+            <td>{{c.materia_prima}}</td>
+            <td>{{c.tipo_material}}</td>
+            <td>{{c.id_pedido}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div> 

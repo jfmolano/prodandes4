@@ -2517,16 +2517,16 @@ public class Prodandes {
         int costo = Integer.parseInt(jP.get("Costo").toString());
         System.out.println("Costo: " + costo);
 
-        String sql = "select * from PEDIDO_PRODUCTO " +
-        "where ID = (" +
-        "select ID from (" +
-        "select * from PEDIDO_PRODUCTO " +
-        "inner join PEDIDO_USA_MATERIA_PRIMA " +
-        "on ID = ID_PEDIDO) " +
-        "inner join MATERIA_PRIMA " +
-        "on NOMBRE = NOMBRE_MATERIA_PRIMA " +
-        "where PRECIO > " + costo + " AND tipo = '" + tipo + "')";
-        
+        String sql = "select * from PEDIDO_PRODUCTO "
+                + "where ID IN ("
+                + "select ID from ("
+                + "select * from PEDIDO_PRODUCTO "
+                + "inner join PEDIDO_USA_MATERIA_PRIMA "
+                + "on ID = ID_PEDIDO) "
+                + "inner join MATERIA_PRIMA "
+                + "on NOMBRE = NOMBRE_MATERIA_PRIMA "
+                + "where PRECIO > " + costo + " AND tipo = '" + tipo + "')";
+
         System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
         System.out.println(sql);
         Statement st = con.createStatement();
@@ -2548,7 +2548,7 @@ public class Prodandes {
         return jArray;
 
     }
-    
+
     @POST
     @Path("/consultarPedidosRFC11")
     public JSONArray consultarPedidosRFC11(JSONObject jP) throws Exception {
@@ -2560,16 +2560,16 @@ public class Prodandes {
         String material = jP.get("Material").toString();
         System.out.println("Material: " + material);
 
-        String sql = "select * from PEDIDO_PRODUCTO " +
-        "where ID = (" +
-        "select ID from (" +
-        "select * from PEDIDO_PRODUCTO " +
-        "inner join PEDIDO_USA_MATERIA_PRIMA " +
-        "on ID = ID_PEDIDO) " +
-        "inner join MATERIA_PRIMA " +
-        "on NOMBRE = NOMBRE_MATERIA_PRIMA " +
-        "where NOMBRE = '"+material+"')";
-        
+        String sql = "select * from PEDIDO_PRODUCTO "
+                + "where ID IN ("
+                + "select ID from ("
+                + "select * from PEDIDO_PRODUCTO "
+                + "inner join PEDIDO_USA_MATERIA_PRIMA "
+                + "on ID = ID_PEDIDO) "
+                + "inner join MATERIA_PRIMA "
+                + "on NOMBRE = NOMBRE_MATERIA_PRIMA "
+                + "where NOMBRE = '" + material + "')";
+
         System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
         System.out.println(sql);
         Statement st = con.createStatement();
@@ -2591,30 +2591,156 @@ public class Prodandes {
         return jArray;
 
     }
-    
-    public void escribirEnLog(String instruccion)
-    {
+
+    public void escribirEnLog(String instruccion) {
         try {
- 
-			File file = new File("H:\\logs\\log.txt");
- 
-			// if file doesnt exists, then create it
-			//if (!file.exists()) {
-			//	file.createNewFile();
-			//}
-                        FileOutputStream fos =  new FileOutputStream(file, true);
-                        PrintWriter out = new PrintWriter(fos);
-			//FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			//BufferedWriter bw = new BufferedWriter(fw);
-			out.println(instruccion);
-			out.close();
- 
-			System.out.println("Done");
- 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-           
+
+            File file = new File("H:\\logs\\log.txt");
+
+            // if file doesnt exists, then create it
+            //if (!file.exists()) {
+            //	file.createNewFile();
+            //}
+            FileOutputStream fos = new FileOutputStream(file, true);
+            PrintWriter out = new PrintWriter(fos);
+            //FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            //BufferedWriter bw = new BufferedWriter(fw);
+            out.println(instruccion);
+            out.close();
+
+            System.out.println("Done");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
     
+    @POST
+    @Path("/consultarEtapasRangoFechaRFC8y9")
+    public JSONArray consultarEtapasRangoFechaRFC8y9(JSONObject jP) throws Exception {
+        try {
+            abrirConexion();
+            String igualdad = (jP.get("igualdad").toString().equals("SI"))?"=":"!=";
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = format.parse(jP.get("fecha1").toString().substring(0, 10));
+            System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+            Calendar cEsp = new GregorianCalendar();
+            cEsp.setTime(date);
+
+            String fecha1 = cEsp.get(GregorianCalendar.DAY_OF_MONTH) + "-" + (cEsp.get(GregorianCalendar.MONTH) + 1) + "-"
+                    + cEsp.get(GregorianCalendar.YEAR);
+
+            date = format.parse(jP.get("fecha2").toString().substring(0, 10));
+            System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+            cEsp = new GregorianCalendar();
+            cEsp.setTime(date);
+
+            String fecha2 = cEsp.get(GregorianCalendar.DAY_OF_MONTH) + "-" + (cEsp.get(GregorianCalendar.MONTH) + 1) + "-"
+                    + cEsp.get(GregorianCalendar.YEAR);
+
+            String criterio = jP.get("criterio").toString();
+            String valor = jP.get("valor").toString();
+
+            JSONArray jResp = new JSONArray();
+            if (criterio.equals("materia prima")) {
+
+                Statement st = con.createStatement();
+                String sql = "select* from "
+                        + "(select * from materias_primas_producto where id_materia_prima"+igualdad+"'" + valor + "') "
+                        + " inner join "
+                        + " (select * from "
+                        + "  (select codigo_secuencia from ETAPA_FECHA where FECHA>=TO_DATE('" + fecha1 + "','dd-mm-yyyy') "
+                        + "AND FECHA<=TO_DATE('" + fecha2 + "','dd-mm-yyyy') "
+                        + "  group by CODIGO_SECUENCIA)c  "
+                        + "   inner join "
+                        + "   ETAPA_DE_PRODUCCION "
+                        + "   on ETAPA_DE_PRODUCCION.numero_secuencia=c.codigo_secuencia) "
+                        + "  on "
+                        + "  id_producto = nombre_producto";
+                System.out.println("RFC8 ----------- QUERY\n" + sql);
+
+                ResultSet rs = st.executeQuery(sql);
+
+                while (rs.next()) {
+                    JSONObject jO = new JSONObject();
+                    jO.put("id_producto", rs.getString("id_producto"));
+                    jO.put("id_etapa", rs.getInt("numero_secuencia"));
+                    jO.put("descripcion", rs.getString("descripcion"));
+                    jO.put("numero_etapa", rs.getInt("etapa"));                    
+                    jO.put("materia_prima", rs.getString("id_materia_prima"));
+                    jResp.add(jO);
+                }
+            } else if (criterio.equals("tipo material")) {
+                Statement st = con.createStatement();
+                String sql = "select* from      \n"
+                        + "      (select id_producto,tipo  from MATERIA_PRIMA inner join MATERIAS_PRIMAS_PRODUCTO on "
+                        + "NOMBRE=ID_MATERIA_PRIMA \n"
+                        + "                  where tipo"+igualdad+"'" + valor + "' \n"
+                        + "                  )\n"
+                        + "      inner join \n"
+                        + "      (select * from \n"
+                        + "            (select codigo_secuencia from ETAPA_FECHA where FECHA>=TO_DATE('" + fecha1 + "','dd-mm-yyyy') "
+                        + "AND FECHA<=TO_DATE('" + fecha2 + "','dd-mm-yyyy') \n"
+                        + "                      group by CODIGO_SECUENCIA)c \n"
+                        + "            inner join\n"
+                        + "            ETAPA_DE_PRODUCCION\n"
+                        + "            on ETAPA_DE_PRODUCCION.numero_secuencia=c.codigo_secuencia)\n"
+                        + "      on\n"
+                        + "      id_producto = nombre_producto";
+                System.out.println("RFC8 ----------- QUERY\n" + sql);
+
+                ResultSet rs = st.executeQuery(sql);
+
+                while (rs.next()) {
+                    JSONObject jO = new JSONObject();
+                    jO.put("id_producto", rs.getString("id_producto"));
+                    jO.put("id_etapa", rs.getInt("numero_secuencia"));
+                    jO.put("descripcion", rs.getString("descripcion"));
+                    jO.put("numero_etapa", rs.getInt("etapa"));
+                    jO.put("tipo_material", rs.getString("tipo"));
+                    jResp.add(jO);
+                }
+
+            } else if (criterio.equals("pedido")) {
+                Statement st = con.createStatement();
+                String sql = "select* from      \n" +
+                    "      (select id_producto,id_pedido from ITEM inner join MATERIAS_PRIMAS_PRODUCTO on "
+                        + "ITEM.NOMBRE_PRODUCTO=MATERIAS_PRIMAS_PRODUCTO.ID_PRODUCTO\n" +
+                    "        where ITEM.ID_PEDIDO"+igualdad+valor+"\n" +
+                    "                  )\n" +
+                    "      inner join \n" +
+                    "      (select * from \n" +
+                    "            (select codigo_secuencia from ETAPA_FECHA where FECHA>=TO_DATE('"+fecha1+"','dd-mm-yyyy') "
+                        + "AND FECHA<=TO_DATE('"+fecha2+"','dd-mm-yyyy') \n" +
+                    "                      group by CODIGO_SECUENCIA)c \n" +
+                    "            inner join\n" +
+                    "            ETAPA_DE_PRODUCCION\n" +
+                    "            on ETAPA_DE_PRODUCCION.numero_secuencia=c.codigo_secuencia)\n" +
+                    "      on\n" +
+                    "      id_producto = nombre_producto";
+                System.out.println("RFC8 ----------- QUERY\n" + sql);
+
+                ResultSet rs = st.executeQuery(sql);
+
+                while (rs.next()) {
+                    JSONObject jO = new JSONObject();
+                    jO.put("id_producto", rs.getString("id_producto"));
+                    jO.put("id_etapa", rs.getInt("numero_secuencia"));
+                    jO.put("descripcion", rs.getString("descripcion"));
+                    jO.put("numero_etapa", rs.getInt("etapa"));
+                    jO.put("id_pedido", rs.getInt("id_pedido"));
+                    jResp.add(jO);
+                }
+
+            }
+            cerrarConexion();
+            return jResp;
+        } catch (Exception e) {
+            rollback();
+            throw e;
+        }
+
+    }
 }

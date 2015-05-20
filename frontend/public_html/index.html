@@ -6,7 +6,8 @@ and open the template in the editor.
 -->
 <html ng-app="ProdAndes">
 <head>
-    <title>TODO supply a title</title>
+    <title>ProdAndes</title>
+    <link rel="shortcut icon" href="Imagenes/Logo.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -88,6 +89,18 @@ and open the template in the editor.
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(16)">
             <desactivar-estacion-form desactivarEstacionForm></desactivar-estacion-form >            
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(17)" >
+            <toolbar-consulta-rf10></toolbar-consulta-rf10>
+            <consultar-rf10-form consultarRf10Form></consultar-rf10-form>  
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(18)" >
+            <toolbar-consulta-rf11></toolbar-consulta-rf11>
+            <consultar-rf11-form consultarRf11Form></consultar-rf11-form>  
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-if="toolbar.isSelected(19)" >
+            <toolbar-consulta-etapas></toolbar-consulta-etapas>
+            <consultar-etapas-form consultarEtapas></consultar-etapas-form>  
         </div>
     </div>
 </div>
