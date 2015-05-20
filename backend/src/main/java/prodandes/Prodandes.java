@@ -2762,7 +2762,7 @@ public class Prodandes implements MessageListener{
     
     @GET
     @Path("/inicializarColas")
-     public void inicializarColas() throws JMSException, NamingException {
+     public String inicializarColas() throws JMSException, NamingException {
         InitialContext init = new InitialContext();
         this.cf = (ConnectionFactory) init.lookup("RemoteConnectionFactory");
         this.d = (Destination) init.lookup("queue/queue1");
@@ -2771,6 +2771,8 @@ public class Prodandes implements MessageListener{
         this.s = ((javax.jms.Connection) this.c).createSession(false, Session.AUTO_ACKNOWLEDGE);
         mc = s.createConsumer(d);
         this.mc.setMessageListener(this);
+        
+        return "Inicializo bien";
     }
 
     public String receive() throws JMSException {

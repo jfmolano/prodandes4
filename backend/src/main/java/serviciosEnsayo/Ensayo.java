@@ -29,7 +29,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import prodandes.Recibir;
+
 import prodandes.Send;
 /**
  *
@@ -59,7 +59,7 @@ public class Ensayo {
     env.put(Context.SECURITY_CREDENTIALS, "jboss1");
     return new InitialContext(env);
     } */
-    private Recibir rec;
+//    private Recibir rec;
     
     public void iniciar() throws NamingException, JMSException {
         InitialContext init = new InitialContext();
@@ -121,10 +121,10 @@ public class Ensayo {
     @Path("/metodo3")
     public String metodo3() {
         try {
-             rec = new Recibir();/*
-             iniciar();
-             send("Ola ca estou eu!");
-             s.close();*/
+//             rec = new Recibir();/*
+//             iniciar();
+//             send("Ola ca estou eu!");
+//             s.close();*/
              return "Bien";
             
         } catch (Exception e) {
