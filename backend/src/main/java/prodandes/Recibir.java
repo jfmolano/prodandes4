@@ -15,7 +15,7 @@ import javax.naming.NamingException;
 public class Recibir implements MessageListener {
 
     private ConnectionFactory cf;
-    private Connection c;
+    private javax.jms.Connection c;
     private Session s;
     private Destination d;
     private MessageConsumer mc;
