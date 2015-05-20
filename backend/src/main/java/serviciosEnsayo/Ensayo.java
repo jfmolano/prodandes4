@@ -60,9 +60,9 @@ public class Ensayo {
     
     public void iniciar() throws NamingException, JMSException {
         InitialContext init = new InitialContext();
-        cf = (ConnectionFactory) init.lookup("jms/RemoteConnectionFactory");
-        d = (Destination) init.lookup("jms/queue/PlayQueue");
-        c = (Connection) cf.createConnection("sistrans", "iteracion");
+        cf = (ConnectionFactory) init.lookup("RemoteConnectionFactory");
+        d = (Destination) init.lookup("queue/PlayQueue");
+        c = (Connection) cf.createConnection("guest123", "guest");
         c.start();
         s = c.createSession(false, Session.AUTO_ACKNOWLEDGE);
         mp = s.createProducer(d);

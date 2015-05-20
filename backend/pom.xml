@@ -16,6 +16,21 @@
     
     <dependencies>
         <dependency>
+            <groupId>1</groupId>
+            <artifactId>1</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
+            <groupId>jta</groupId>
+            <artifactId>jta</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
+            <groupId>hornetq-client</groupId>
+            <artifactId>hornetq-client</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
