@@ -97,6 +97,9 @@ public class Prodandes implements MessageListener {
             System.out.println("Fecha: " + sFecha);
 
             String nombreProducto = jO.get("nombre").toString();
+
+            Statement stx = con.createStatement();
+            ResultSet rsx = stx.executeQuery("select * from PRODUCTO where nonmbre='" + nombreProducto + "'");
             int cantidad = (int) jO.get("cantidad");
             int id_cliente = (int) jO.get("id_cliente");
 
@@ -106,145 +109,108 @@ public class Prodandes implements MessageListener {
 
             String fechaEntrega = c.get(GregorianCalendar.DAY_OF_MONTH) + "-"
                     + (c.get(GregorianCalendar.MONTH) + 2) + "-" + c.get(GregorianCalendar.YEAR);
+            if (rsx.next()) {
 
-            System.out.println("FEcha actual " + fechaSolicitud);
-            String sql = "select max (id) as MAXIMO from PEDIDO_PRODUCTO";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            escribirEnLog(sql);
-            int id_pedido = 1;
-            if (rs.next()) {
-                id_pedido = rs.getInt("MAXIMO") + 1;
-                jRespuesta.put("id_pedido", id_pedido);
-
-                System.out.println("JSON respuesta " + jRespuesta.toString());
-                //Crear pedido nuevo
-                sql = "INSERT INTO PEDIDO_PRODUCTO (id,FECHA_ESPERADA_ENTREGA,Estado,cantidad_producto"
-                        + ",id_cliente,fecha_solicitud) VALUES (" + id_pedido + ",TO_DATE"
-                        + "('" + sFecha + "','DD-MM-YYYY'),'Espera'," + cantidad + ","
-                        + id_cliente + " ,TO_DATE('" + fechaSolicitud + "','DD-MM-YYYY'))";
-
-                System.out.println("----------------------Query-----------------------");
-                System.out.println(sql);
-                Statement st2 = con.createStatement();
-
-                st2.executeUpdate(sql);
-
+                System.out.println("FEcha actual " + fechaSolicitud);
+                String sql = "select max (id) as MAXIMO from PEDIDO_PRODUCTO";
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
                 escribirEnLog(sql);
-                st2.close();
-            }
-            st.close();
-
-            int productosReservados = reservarProductoBodega(nombreProducto, cantidad, id_pedido);
-
-            System.out.println("Productos reservados " + productosReservados);
-            if (productosReservados == cantidad) {
-
-                //Modificar fecha entrega
-                Statement st3 = con.createStatement();
-                sql = "update PEDIDO_PRODUCTO set FECHA_ENTREGA=TO_DATE('" + sFecha + "','DD-MM-YYYY'),"
-                        + "ESTADO='En Bodega'"
-                        + "where id=" + id_pedido;
-                System.out.println("------------------QUERY----------------------------");
-                System.out.println(sql);
-                st3.executeUpdate(sql);
-
-                escribirEnLog(sql);
-                st3.close();
-                resp = "En Bodega";
-            } else {
-
-                // Verificar que la cantidad disminuye dependiendo de cuantos productos ya están en bodega
-                cantidad = cantidad - productosReservados;
-
-                //Verificar que haya estación de produccion disponible
-                sql = "select * from ESTACION where ESTADO='Disponible' AND CAPACIDAD > " + cantidad;
-                System.out.println("------------------QUERY----------------------------");
-                System.out.println(sql);
-
-                Statement st6 = con.createStatement();
-                rs = st6.executeQuery(sql);
-
-                boolean hayEstaciones = false;
-
+                int id_pedido = 1;
                 if (rs.next()) {
+                    id_pedido = rs.getInt("MAXIMO") + 1;
+                    jRespuesta.put("id_pedido", id_pedido);
 
-                    int codigo = rs.getInt("CODIGO");
+                    System.out.println("JSON respuesta " + jRespuesta.toString());
+                    //Crear pedido nuevo
+                    sql = "INSERT INTO PEDIDO_PRODUCTO (id,FECHA_ESPERADA_ENTREGA,Estado,cantidad_producto"
+                            + ",id_cliente,fecha_solicitud) VALUES (" + id_pedido + ",TO_DATE"
+                            + "('" + sFecha + "','DD-MM-YYYY'),'Espera'," + cantidad + ","
+                            + id_cliente + " ,TO_DATE('" + fechaSolicitud + "','DD-MM-YYYY'))";
 
-                    sql = "update ESTACION set ESTADO='Reservado',ID_PEDIDO=" + id_pedido
-                            + "WHERE CODIGO=" + codigo;
-                    Statement st7 = con.createStatement();
-                    st7.executeUpdate(sql);
-                    hayEstaciones = true;
-                    st7.close();
+                    System.out.println("----------------------Query-----------------------");
+                    System.out.println(sql);
+                    Statement st2 = con.createStatement();
+
+                    st2.executeUpdate(sql);
+
+                    escribirEnLog(sql);
+                    st2.close();
                 }
+                st.close();
 
-                st6.close();
+                int productosReservados = reservarProductoBodega(nombreProducto, cantidad, id_pedido);
 
-                if (hayEstaciones) {
-                    //Reservar recursos(materias primas) o pedir suministros
-                    int numProductosPotencial = Integer.MAX_VALUE;
+                System.out.println("Productos reservados " + productosReservados);
+                if (productosReservados == cantidad) {
 
-                    System.out.println("Nombre producto: " + nombreProducto);
-                    //Averiguar Componentes en bodega
-                    sql = "select * from COMPONENTES_PRODUCTO WHERE id_producto='" + nombreProducto + "'";
+                    //Modificar fecha entrega
                     Statement st3 = con.createStatement();
-                    rs = st3.executeQuery(sql);
+                    sql = "update PEDIDO_PRODUCTO set FECHA_ENTREGA=TO_DATE('" + sFecha + "','DD-MM-YYYY'),"
+                            + "ESTADO='En Bodega'"
+                            + "where id=" + id_pedido;
+                    System.out.println("------------------QUERY----------------------------");
+                    System.out.println(sql);
+                    st3.executeUpdate(sql);
 
-                    while (rs.next()) {
+                    escribirEnLog(sql);
+                    st3.close();
+                    resp = "En Bodega";
+                } else {
 
-                        String id_componente = rs.getString("id_componente");
-                        int cantidad_unidades = rs.getInt("cantidad_unidades");
+                    // Verificar que la cantidad disminuye dependiendo de cuantos productos ya están en bodega
+                    cantidad = cantidad - productosReservados;
 
-                        int numComponentes = cantidadComponentesBodega(id_componente);
-                        if (numComponentes >= cantidad_unidades) {
+                    //Verificar que haya estación de produccion disponible
+                    sql = "select * from ESTACION where ESTADO='Disponible' AND CAPACIDAD > " + cantidad;
+                    System.out.println("------------------QUERY----------------------------");
+                    System.out.println(sql);
 
-                            int alcanzanComponentes = numComponentes / cantidad_unidades;
-                            numProductosPotencial = Math.min(alcanzanComponentes, numProductosPotencial);
-                        }
+                    Statement st6 = con.createStatement();
+                    rs = st6.executeQuery(sql);
+
+                    boolean hayEstaciones = false;
+
+                    if (rs.next()) {
+
+                        int codigo = rs.getInt("CODIGO");
+
+                        sql = "update ESTACION set ESTADO='Reservado',ID_PEDIDO=" + id_pedido
+                                + "WHERE CODIGO=" + codigo;
+                        Statement st7 = con.createStatement();
+                        st7.executeUpdate(sql);
+                        hayEstaciones = true;
+                        st7.close();
                     }
 
-                    st3.close();
+                    st6.close();
 
-                    //Averiguar Materias Primas en bodega
-                    sql = "select * from MATERIAS_PRIMAS_PRODUCTO WHERE id_producto='" + nombreProducto + "'";
-                    st3 = con.createStatement();
-                    rs = st3.executeQuery(sql);
+                    if (hayEstaciones) {
+                        //Reservar recursos(materias primas) o pedir suministros
+                        int numProductosPotencial = Integer.MAX_VALUE;
 
-                    while (rs.next()) {
-
-                        String id_materia = rs.getString("id_materia_prima");
-                        int cantidad_unidades = rs.getInt("cantidad_unidades");
-
-                        int numMateriasBodega = cantidadMateriasPrimasBodega(id_materia);
-                        if (numMateriasBodega >= cantidad_unidades) {
-
-                            int alcanzanMaterias = numMateriasBodega / cantidad_unidades;
-                            numProductosPotencial = Math.min(alcanzanMaterias, numProductosPotencial);
-                        }
-                    }
-
-                    st3.close();
-
-                    System.out.println("Numero productos se pueden hacer con bodega " + numProductosPotencial);
-
-                    if (numProductosPotencial != Integer.MAX_VALUE
-                            && numProductosPotencial >= cantidad) {
-
-                        //Reservar componentes
+                        System.out.println("Nombre producto: " + nombreProducto);
+                        //Averiguar Componentes en bodega
                         sql = "select * from COMPONENTES_PRODUCTO WHERE id_producto='" + nombreProducto + "'";
-                        st3 = con.createStatement();
+                        Statement st3 = con.createStatement();
                         rs = st3.executeQuery(sql);
 
                         while (rs.next()) {
 
                             String id_componente = rs.getString("id_componente");
                             int cantidad_unidades = rs.getInt("cantidad_unidades");
-                            reservarComponenteBodega(id_componente, cantidad * cantidad_unidades, id_pedido);
+
+                            int numComponentes = cantidadComponentesBodega(id_componente);
+                            if (numComponentes >= cantidad_unidades) {
+
+                                int alcanzanComponentes = numComponentes / cantidad_unidades;
+                                numProductosPotencial = Math.min(alcanzanComponentes, numProductosPotencial);
+                            }
                         }
+
                         st3.close();
 
-                        // Reservar materias primas
+                        //Averiguar Materias Primas en bodega
                         sql = "select * from MATERIAS_PRIMAS_PRODUCTO WHERE id_producto='" + nombreProducto + "'";
                         st3 = con.createStatement();
                         rs = st3.executeQuery(sql);
@@ -253,24 +219,74 @@ public class Prodandes implements MessageListener {
 
                             String id_materia = rs.getString("id_materia_prima");
                             int cantidad_unidades = rs.getInt("cantidad_unidades");
-                            reservarMateriaPrimaBodega(id_materia, cantidad * cantidad_unidades, id_pedido);
+
+                            int numMateriasBodega = cantidadMateriasPrimasBodega(id_materia);
+                            if (numMateriasBodega >= cantidad_unidades) {
+
+                                int alcanzanMaterias = numMateriasBodega / cantidad_unidades;
+                                numProductosPotencial = Math.min(alcanzanMaterias, numProductosPotencial);
+                            }
                         }
 
                         st3.close();
 
-                        //Falta fecha esperada
-                        crearItemsReservadosPedido(nombreProducto, id_pedido, cantidad);
-                        resp = "Espera";
+                        System.out.println("Numero productos se pueden hacer con bodega " + numProductosPotencial);
+
+                        if (numProductosPotencial != Integer.MAX_VALUE
+                                && numProductosPotencial >= cantidad) {
+
+                            //Reservar componentes
+                            sql = "select * from COMPONENTES_PRODUCTO WHERE id_producto='" + nombreProducto + "'";
+                            st3 = con.createStatement();
+                            rs = st3.executeQuery(sql);
+
+                            while (rs.next()) {
+
+                                String id_componente = rs.getString("id_componente");
+                                int cantidad_unidades = rs.getInt("cantidad_unidades");
+                                reservarComponenteBodega(id_componente, cantidad * cantidad_unidades, id_pedido);
+                            }
+                            st3.close();
+
+                            // Reservar materias primas
+                            sql = "select * from MATERIAS_PRIMAS_PRODUCTO WHERE id_producto='" + nombreProducto + "'";
+                            st3 = con.createStatement();
+                            rs = st3.executeQuery(sql);
+
+                            while (rs.next()) {
+
+                                String id_materia = rs.getString("id_materia_prima");
+                                int cantidad_unidades = rs.getInt("cantidad_unidades");
+                                reservarMateriaPrimaBodega(id_materia, cantidad * cantidad_unidades, id_pedido);
+                            }
+
+                            st3.close();
+
+                            //Falta fecha esperada
+                            crearItemsReservadosPedido(nombreProducto, id_pedido, cantidad);
+                            resp = "Espera";
+                        } else {
+                            //Poner el pedido en estad ESPERA
+                            st3 = con.createStatement();
+                            sql = "update PEDIDO_PRODUCTO set ESTADO='Espera' where id=" + id_pedido;
+                            st3.executeUpdate(sql);
+                            st3.close();
+
+                            resp = "Buzon";
+                            Send env = new Send();
+                            //RF18-fecha-idProducto-cantidad-idCliente
+                            String sFechaEnv = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + cEsp.get(GregorianCalendar.DAY_OF_MONTH)
+                                    + "/" + cEsp.get(GregorianCalendar.YEAR);
+
+                            env.enviar("RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente);
+                            JSONObject jElm = new JSONObject();
+                            jElm.put("id_pedido", id_pedido);
+                            cancelarPedido(jElm);
+                        }
                     } else {
-                        //Poner el pedido en estad ESPERA
-                        st3 = con.createStatement();
-                        sql = "update PEDIDO_PRODUCTO set ESTADO='Espera' where id=" + id_pedido;
-                        st3.executeUpdate(sql);
-                        st3.close();
 
                         resp = "Buzon";
                         Send env = new Send();
-                        //RF18-fecha-idProducto-cantidad-idCliente
                         String sFechaEnv = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + cEsp.get(GregorianCalendar.DAY_OF_MONTH)
                                 + "/" + cEsp.get(GregorianCalendar.YEAR);
 
@@ -279,43 +295,44 @@ public class Prodandes implements MessageListener {
                         jElm.put("id_pedido", id_pedido);
                         cancelarPedido(jElm);
                     }
-                } else {
-
-                    resp = "Buzon";
-                    Send env = new Send();
-                    String sFechaEnv = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + cEsp.get(GregorianCalendar.DAY_OF_MONTH)
-                            + "/" + cEsp.get(GregorianCalendar.YEAR);
-
-                    env.enviar("RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente);
-                    JSONObject jElm = new JSONObject();
-                    jElm.put("id_pedido", id_pedido);
-                    cancelarPedido(jElm);
                 }
-            }
-            cerrarConexion();
-            //return resp;
+                cerrarConexion();
+                //return resp;
 
-            if (resp.equals("Buzon")) {
-                Long milis = System.currentTimeMillis();
-                while (System.currentTimeMillis() - milis < 10000) {
-                    for (int i = 0; i < buzon.size(); i++) {
-                        if( buzon.get(i).startsWith("RF18R-")){
-                           // RF18R-numeroConf-Estado
-                            String [] s = buzon.get(i).split("-");
-                           jRespuesta = new JSONObject();
-                           jRespuesta.put("id_pedido", s[1]);
-                           jRespuesta.put("Respuesta", s[2]);
-                           buzon.remove(i);
-                           return jRespuesta;
+                if (resp.equals("Buzon")) {
+                    Long milis = System.currentTimeMillis();
+                    while (System.currentTimeMillis() - milis < 10000) {
+                        for (int i = 0; i < buzon.size(); i++) {
+                            if (buzon.get(i).startsWith("RF18R-")) {
+                                // RF18R-numeroConf-Estado
+                                String[] s = buzon.get(i).split("-");
+                                jRespuesta = new JSONObject();
+                                jRespuesta.put("id_pedido", s[1]);
+                                jRespuesta.put("Respuesta", s[2]);
+                                buzon.remove(i);
+                                return jRespuesta;
+                            }
                         }
                     }
+                    jRespuesta.put("Respuesta", "Error en la otra aplicacion");
+                    return jRespuesta;
                 }
-                jRespuesta.put("Respuesta", "Error en la otra aplicacion"); 
+
+                jRespuesta.put("Respuesta", resp);
+                return jRespuesta;
+            } else {
+                System.out.println("No hay productos así en nuestra base de datos");
+                resp = "Buzon";
+                Send env = new Send();
+                String sFechaEnv = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + cEsp.get(GregorianCalendar.DAY_OF_MONTH)
+                        + "/" + cEsp.get(GregorianCalendar.YEAR);
+
+                String mensaje = "RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente;
+                env.enviar(mensaje);
+                System.out.println("Mensaje a enviar "+mensaje);
+                jRespuesta.put("Respuesta", resp);
                 return jRespuesta;
             }
-
-            jRespuesta.put("Respuesta", resp);
-            return jRespuesta;
         } catch (Exception e) {
             e.printStackTrace();
             rollback();
@@ -1421,7 +1438,7 @@ public class Prodandes implements MessageListener {
     @Path("/verificarProductosEstacionAnterior")
     public int verificarProductosEstacionAnterior(int numSecuencia) throws Exception {
         try {
-        //Dar etapa y producto del num_secuencia
+            //Dar etapa y producto del num_secuencia
 //        String query3 = "select etapa, nombre_producto from ETAPA_DE_PRODUCCION where NUMERO_SECUENCIA = " + numSecuencia;
 //        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
 //        System.out.println(query3);
@@ -2113,7 +2130,7 @@ public class Prodandes implements MessageListener {
         return jRespuestaOk;
     }
 
-   // activarEstacion
+    // activarEstacion
     @POST
     @Path("/activarEstacion")
     public JSONObject activarEstacion(JSONObject jO) throws Exception {
@@ -2765,6 +2782,7 @@ public class Prodandes implements MessageListener {
 
             }
             cerrarConexion();
+
             return jResp;
         } catch (Exception e) {
             rollback();
@@ -2801,7 +2819,7 @@ public class Prodandes implements MessageListener {
         try {
             TextMessage text = (TextMessage) message;
             String respuesta = text.getText();
-            String txt = respuesta; 
+            String txt = respuesta;
             System.out.println("El mensaje de Jose fue: " + respuesta);
             System.out.println("onMessage");
             System.out.println(respuesta.startsWith("jp-pe"));
@@ -2813,12 +2831,11 @@ public class Prodandes implements MessageListener {
                 Calendar c = new GregorianCalendar(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]));
 
                 JSONObject jp = new JSONObject();
-                
+
                 jp.put("fechaEsperada", c.getTime());
                 jp.put("nombre", params[2]);
                 jp.put("cantidad", params[3]);
                 jp.put("id_cliente", params[4]);
-
 
                 JSONObject jO = registrarPedido2(jp);
 
@@ -2828,15 +2845,11 @@ public class Prodandes implements MessageListener {
             } else if (txt.startsWith("RF18R-")) {
 
                 buzon.add(txt);
-            }
-            else if(txt.equals("jp-pe"))
-            {
+            } else if (txt.equals("jp-pe")) {
                 System.out.println("Entro a jp-pe");
                 Send env = new Send();
                 env.enviar(darEtapasCuentaJose());
-            }
-            else if(txt.equals("jp-r"))
-            {
+            } else if (txt.equals("jp-r")) {
                 System.out.println("Entro a jp-r");
                 buzon.add(txt);
             }
@@ -2859,7 +2872,7 @@ public class Prodandes implements MessageListener {
         }
 
     }
-    
+
     public JSONObject registrarPedido2(JSONObject jO) throws Exception {
         try {
             JSONObject jRespuesta = new JSONObject();
@@ -3075,7 +3088,7 @@ public class Prodandes implements MessageListener {
             return jRespuesta;
         }
     }
-    
+
     @GET
     @Path("/darEtapasCuentaJose")
     public String darEtapasCuentaJose() throws Exception {
@@ -3100,14 +3113,14 @@ public class Prodandes implements MessageListener {
         cerrarConexion();
         JSONObject jObject = new JSONObject();
         jObject.put("arreglo", jArray);
-        return "pj-r::"+jObject;
+        return "pj-r::" + jObject;
     }
-    
+
     @GET
     @Path("/borrarRegEtapaEstacionJose/{id_etapa}/{id_estacion}")
-    public String borrarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId,@PathParam("id_estacion") int estacionId) throws Exception {
+    public String borrarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId, @PathParam("id_estacion") int estacionId) throws Exception {
         abrirConexion();
-        String sql = "DELETE FROM ETAPA_ESTACION WHERE ETAPA_ID="+etapaId+" AND ESTACION_ID="+estacionId;
+        String sql = "DELETE FROM ETAPA_ESTACION WHERE ETAPA_ID=" + etapaId + " AND ESTACION_ID=" + estacionId;
         System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
         System.out.println(sql);
         Statement st = con.createStatement();
@@ -3116,12 +3129,12 @@ public class Prodandes implements MessageListener {
         cerrarConexion();
         return "Bien";
     }
-    
+
     @GET
     @Path("/insertarRegEtapaEstacionJose/{id_etapa}/{id_estacion}")
-    public String insertarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId,@PathParam("id_estacion") int estacionId) throws Exception {
+    public String insertarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId, @PathParam("id_estacion") int estacionId) throws Exception {
         abrirConexion();
-        String sql = "INSERT INTO ETAPA_ESTACION (ETAPA_ID,ESTACION_ID) VALUES ("+etapaId+","+estacionId+")";
+        String sql = "INSERT INTO ETAPA_ESTACION (ETAPA_ID,ESTACION_ID) VALUES (" + etapaId + "," + estacionId + ")";
         System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
         System.out.println(sql);
         Statement st = con.createStatement();
@@ -3130,7 +3143,7 @@ public class Prodandes implements MessageListener {
         cerrarConexion();
         return "Bien";
     }
-    
+
     @GET
     @Path("/metodoPrueba")
     public String metodoPrueba() {
@@ -3138,24 +3151,24 @@ public class Prodandes implements MessageListener {
             Send env = new Send();
             env.enviar("pj-pe");
             System.out.println("Bien");
-        
-        org.json.JSONObject jRespuesta;
-        Long milis = System.currentTimeMillis();
-        org.json.JSONArray jArray = new org.json.JSONArray();
-                while (System.currentTimeMillis() - milis < 10000) {
-                    for (int i = 0; i < buzon.size(); i++) {
-                        if( buzon.get(i).startsWith("jp-r")){
-                           String[] arregloTexto = buzon.get(i).split("::");
-                           String texto = arregloTexto[1];
-                           jRespuesta = new org.json.JSONObject(texto);
-                           jArray = jRespuesta.getJSONArray("arreglo");
-                        }
+
+            org.json.JSONObject jRespuesta;
+            Long milis = System.currentTimeMillis();
+            org.json.JSONArray jArray = new org.json.JSONArray();
+            while (System.currentTimeMillis() - milis < 10000) {
+                for (int i = 0; i < buzon.size(); i++) {
+                    if (buzon.get(i).startsWith("jp-r")) {
+                        String[] arregloTexto = buzon.get(i).split("::");
+                        String texto = arregloTexto[1];
+                        jRespuesta = new org.json.JSONObject(texto);
+                        jArray = jRespuesta.getJSONArray("arreglo");
                     }
                 }
-        return "Retorna "+jArray.toString();
+            }
+            return "Retorna " + jArray.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            return("Mal");
+            return ("Mal");
         }
     }
 }
