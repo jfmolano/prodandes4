@@ -516,6 +516,7 @@ prodAndes.directive('consultarEtapasForm', function(){
             self.consulta = {};
             self.etapas = [];
             self.etapa={};
+            self.otrosLista = '';
             self.etapaSelected=[];
             this.getSelected = function(){
                 return self.etapaSelected[0];
@@ -551,7 +552,8 @@ prodAndes.directive('consultarEtapasForm', function(){
                 $http.post('http://localhost:8080/backend/Servicios/consultarEtapasRangoFechaRFC8y9' , self.consulta).success(function(data){
 
                     console.log("Consultar etapas "+JSON.stringify(data));
-                    self.etapas=data;
+                    self.etapas=data.lista;
+                    self.otrosLista = data.otrosLista;
                     console.log("Consultar etapas 2"+JSON.stringify(self.etapas));
                     self.consulta={};
                 });

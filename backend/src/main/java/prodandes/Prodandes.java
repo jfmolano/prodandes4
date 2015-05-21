@@ -329,7 +329,7 @@ public class Prodandes implements MessageListener {
 
                 String mensaje = "RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente;
                 env.enviar(mensaje);
-                System.out.println("Mensaje a enviar "+mensaje);
+                System.out.println("Mensaje a enviar " + mensaje);
                 jRespuesta.put("Respuesta", resp);
                 return jRespuesta;
             }
@@ -2665,9 +2665,10 @@ public class Prodandes implements MessageListener {
 
     @POST
     @Path("/consultarEtapasRangoFechaRFC8y9")
-    public JSONArray consultarEtapasRangoFechaRFC8y9(JSONObject jP) throws Exception {
+    public JSONObject consultarEtapasRangoFechaRFC8y9(JSONObject jP) throws Exception {
         try {
             abrirConexion();
+            JSONObject jreturn = new JSONObject();
             String igualdad = (jP.get("igualdad").toString().equals("SI")) ? "=" : "!=";
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date = format.parse(jP.get("fecha1").toString().substring(0, 10));
@@ -2677,6 +2678,8 @@ public class Prodandes implements MessageListener {
 
             String fecha1 = cEsp.get(GregorianCalendar.DAY_OF_MONTH) + "-" + (cEsp.get(GregorianCalendar.MONTH) + 1) + "-"
                     + cEsp.get(GregorianCalendar.YEAR);
+            String fecha1Env = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + (cEsp.get(GregorianCalendar.DAY_OF_MONTH)) + "/"
+                    + cEsp.get(GregorianCalendar.YEAR);
 
             date = format.parse(jP.get("fecha2").toString().substring(0, 10));
             System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
@@ -2685,11 +2688,20 @@ public class Prodandes implements MessageListener {
 
             String fecha2 = cEsp.get(GregorianCalendar.DAY_OF_MONTH) + "-" + (cEsp.get(GregorianCalendar.MONTH) + 1) + "-"
                     + cEsp.get(GregorianCalendar.YEAR);
+            String fecha2Env = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + (cEsp.get(GregorianCalendar.DAY_OF_MONTH)) + "/"
+                    + cEsp.get(GregorianCalendar.YEAR);
 
             String criterio = jP.get("criterio").toString();
             String valor = jP.get("valor").toString();
 
             JSONArray jResp = new JSONArray();
+
+            // RC12-solicitud-id-fechaInicial-FechaFinal
+            Send send = new Send();
+            String mensaje = "RC12-" + criterio + "-" + valor + "-" + fecha1Env + "-" + fecha2Env;
+            System.out.println("Mensaje a enviar " + mensaje);
+            send.enviar(mensaje);
+
             if (criterio.equals("materia prima")) {
 
                 Statement st = con.createStatement();
@@ -2781,9 +2793,22 @@ public class Prodandes implements MessageListener {
                 }
 
             }
-            cerrarConexion();
+            Long milis = System.currentTimeMillis();
+            while (System.currentTimeMillis() - milis < 10000) {
+                for (int i = 0; i < buzon.size(); i++) {
+                    if (buzon.get(i).startsWith("RFC12R$")) {
+                        // RFC12$elemento1Tupla1-elemento2Tupla1-elemento3Tupla1/elemento1Tupla2-elemento2Tupla2
+                        
+                        String str = buzon.get(i).substring(7);
+                        buzon.remove(i);
+                        jreturn.put("otraLista",str );
+                    }
+                }
+            }
 
-            return jResp;
+            cerrarConexion();
+            jreturn.put("lista", jResp);
+            return jreturn;
         } catch (Exception e) {
             rollback();
             throw e;
