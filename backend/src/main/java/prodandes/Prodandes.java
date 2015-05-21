@@ -99,7 +99,7 @@ public class Prodandes implements MessageListener {
             String nombreProducto = jO.get("nombre").toString();
 
             Statement stx = con.createStatement();
-            ResultSet rsx = stx.executeQuery("select * from PRODUCTO where nonmbre='" + nombreProducto + "'");
+            ResultSet rsx = stx.executeQuery("select * from PRODUCTO where nombre='" + nombreProducto + "'");
             int cantidad = (int) jO.get("cantidad");
             int id_cliente = (int) jO.get("id_cliente");
 
