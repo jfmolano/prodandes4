@@ -2955,6 +2955,7 @@ public class Prodandes implements MessageListener {
             System.out.println("Registrar Pedido 2 "+jO.toJSONString());
             abrirConexion();
 
+            
             String lock = "lock table " + "pedido_producto" + " in exclusive mode";
             Statement stmt1 = con.createStatement();
             stmt1.execute(lock);
