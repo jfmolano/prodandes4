@@ -2800,15 +2800,35 @@ public class Prodandes implements MessageListener {
         try {
             TextMessage text = (TextMessage) message;
             String respuesta = text.getText();
+            String txt = respuesta; 
             System.out.println("El mensaje de Jose fue: " + respuesta);
             System.out.println("onMessage");
             System.out.println(respuesta.startsWith("jp-pe"));
             System.out.println(respuesta.equals("jp-pe"));
-            if (respuesta.startsWith("RF18-")){
+            if (txt.startsWith("RF18-")) {
+
+                String[] params = txt.split("-");
+                String[] fecha = params[1].split("/");
+                Calendar c = new GregorianCalendar(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]));
+
+                JSONObject jp = new JSONObject();
                 
-                //TODO
+                jp.put("fechaEsperada", c.getTime());
+                jp.put("nombre", params[2]);
+                jp.put("cantidad", params[3]);
+                jp.put("id_cliente", params[4]);
+
+
+                JSONObject jO = registrarPedido2(jp);
+
+                Send env = new Send();
+                env.enviar("RF18R-" + jO.get("id_pedido") + "-" + jO.get("Respuesta"));
+
+            } else if (txt.startsWith("RF18R-")) {
+
+                buzon.add(txt.substring(6));
             }
-            else if(respuesta.equals("jp-pe"))
+            else if(txt.equals("jp-pe"))
             {
                 System.out.println("Entro a jp-pe");
                 Send env = new Send();
