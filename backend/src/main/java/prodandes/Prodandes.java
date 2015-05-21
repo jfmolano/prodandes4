@@ -2878,7 +2878,7 @@ public class Prodandes implements MessageListener {
 
                 JSONObject jp = new JSONObject();
 
-                jp.put("fechaEsperada", fecha[2]+"-"+fecha[0]+"-"+fecha[1]);
+                jp.put("fechaEsperada", fecha[2]+"-"+((fecha[0].length()==1)?("0"+fecha[0]):fecha[0])+"-"+fecha[1]);
                 jp.put("nombre", params[2]);
                 jp.put("cantidad", params[3]);
                 jp.put("id_cliente", params[4]);
