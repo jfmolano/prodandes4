@@ -101,7 +101,7 @@ public class Prodandes implements MessageListener {
             Statement stx = con.createStatement();
             ResultSet rsx = stx.executeQuery("select * from PRODUCTO where nombre='" + nombreProducto + "'");
             int cantidad = (int) jO.get("cantidad");
-            int id_cliente = (int) jO.get("id_cliente");
+            String sId_cliente = jO.get("id_cliente").toString();
 
             Calendar c = new GregorianCalendar();
             String fechaSolicitud = c.get(GregorianCalendar.DAY_OF_MONTH) + "-"
@@ -110,7 +110,8 @@ public class Prodandes implements MessageListener {
             String fechaEntrega = c.get(GregorianCalendar.DAY_OF_MONTH) + "-"
                     + (c.get(GregorianCalendar.MONTH) + 2) + "-" + c.get(GregorianCalendar.YEAR);
             if (rsx.next()) {
-
+                
+                int id_cliente = Integer.parseInt(sId_cliente);
                 System.out.println("FEcha actual " + fechaSolicitud);
                 String sql = "select max (id) as MAXIMO from PEDIDO_PRODUCTO";
                 Statement st = con.createStatement();
@@ -329,7 +330,7 @@ public class Prodandes implements MessageListener {
                 String sFechaEnv = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + cEsp.get(GregorianCalendar.DAY_OF_MONTH)
                         + "/" + cEsp.get(GregorianCalendar.YEAR);
 
-                String mensaje = "RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente;
+                String mensaje = "RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + sId_cliente;
                 env.enviar(mensaje);
                 env.close();
                 System.out.println("Mensaje a enviar " + mensaje);

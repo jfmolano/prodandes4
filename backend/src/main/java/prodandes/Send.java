@@ -29,6 +29,7 @@ public class Send {
     }
 
     public void enviar(String string) throws JMSException {
+        System.out.println("Enviar :"+string);
         TextMessage tm = this.s.createTextMessage(string);
         this.mp.send(tm);
     }
