@@ -2952,7 +2952,7 @@ public class Prodandes implements MessageListener {
         try {
             JSONObject jRespuesta = new JSONObject();
             String resp = "";
-
+            System.out.println("Registrar Pedido 2 "+jO.toJSONString());
             abrirConexion();
 
             String lock = "lock table " + "pedido_producto" + " in exclusive mode";
