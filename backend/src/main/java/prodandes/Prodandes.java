@@ -44,7 +44,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 /**
  *
@@ -117,7 +117,7 @@ public class Prodandes implements MessageListener {
                 id_pedido = rs.getInt("MAXIMO") + 1;
                 jRespuesta.put("id_pedido", id_pedido);
 
-                System.out.println("JSON respuesta " + jRespuesta.toJSONString());
+                System.out.println("JSON respuesta " + jRespuesta.toString());
                 //Crear pedido nuevo
                 sql = "INSERT INTO PEDIDO_PRODUCTO (id,FECHA_ESPERADA_ENTREGA,Estado,cantidad_producto"
                         + ",id_cliente,fecha_solicitud) VALUES (" + id_pedido + ",TO_DATE"
@@ -304,7 +304,8 @@ public class Prodandes implements MessageListener {
                             String [] s = buzon.get(i).split("-");
                            jRespuesta = new JSONObject();
                            jRespuesta.put("id_pedido", s[1]);
-                           jRespuesta.put("Respuesta", s[2]); 
+                           jRespuesta.put("Respuesta", s[2]);
+                           buzon.remove(i);
                            return jRespuesta;
                         }
                     }
@@ -617,7 +618,7 @@ public class Prodandes implements MessageListener {
     public JSONArray consultarMateriasPrimas(JSONObject jP) throws Exception {
 
         System.out.println("LLEGO");
-        System.out.println("PArametro " + jP.toJSONString());
+        System.out.println("PArametro " + jP.toString());
         JSONArray jArray = new JSONArray();
         abrirConexion();
         String criterio = jP.get("Criterio").toString();
@@ -2826,7 +2827,7 @@ public class Prodandes implements MessageListener {
 
             } else if (txt.startsWith("RF18R-")) {
 
-                buzon.add(txt.substring(6));
+                buzon.add(txt);
             }
             else if(txt.equals("jp-pe"))
             {
@@ -2834,7 +2835,11 @@ public class Prodandes implements MessageListener {
                 Send env = new Send();
                 env.enviar(darEtapasCuentaJose());
             }
-
+            else if(txt.equals("jp-r"))
+            {
+                System.out.println("Entro a jp-r");
+                buzon.add(txt);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2899,7 +2904,7 @@ public class Prodandes implements MessageListener {
                 id_pedido = rs.getInt("MAXIMO") + 1;
                 jRespuesta.put("id_pedido", id_pedido);
 
-                System.out.println("JSON respuesta " + jRespuesta.toJSONString());
+                System.out.println("JSON respuesta " + jRespuesta.toString());
                 //Crear pedido nuevo
                 sql = "INSERT INTO PEDIDO_PRODUCTO (id,FECHA_ESPERADA_ENTREGA,Estado,cantidad_producto"
                         + ",id_cliente,fecha_solicitud) VALUES (" + id_pedido + ",TO_DATE"
@@ -3095,7 +3100,7 @@ public class Prodandes implements MessageListener {
         cerrarConexion();
         JSONObject jObject = new JSONObject();
         jObject.put("arreglo", jArray);
-        return "pj-r:"+jObject;
+        return "pj-r::"+jObject;
     }
     
     @GET
