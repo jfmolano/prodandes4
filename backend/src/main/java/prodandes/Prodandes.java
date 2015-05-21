@@ -2661,26 +2661,26 @@ public class Prodandes implements MessageListener {
     }
 
     public void escribirEnLog(String instruccion) {
-        try {
-
-            File file = new File("H:\\logs\\log.txt");
-
-            // if file doesnt exists, then create it
-            //if (!file.exists()) {
-            //	file.createNewFile();
-            //}
-            FileOutputStream fos = new FileOutputStream(file, true);
-            PrintWriter out = new PrintWriter(fos);
-            //FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            //BufferedWriter bw = new BufferedWriter(fw);
-            out.println(instruccion);
-            out.close();
-
-            System.out.println("Done");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//
+//            File file = new File("H:\\logs\\log.txt");
+//
+//            // if file doesnt exists, then create it
+//            //if (!file.exists()) {
+//            //	file.createNewFile();
+//            //}
+//            FileOutputStream fos = new FileOutputStream(file, true);
+//            PrintWriter out = new PrintWriter(fos);
+//            //FileWriter fw = new FileWriter(file.getAbsoluteFile());
+//            //BufferedWriter bw = new BufferedWriter(fw);
+//            out.println(instruccion);
+//            out.close();
+//
+//            System.out.println("Done");
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
