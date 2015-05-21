@@ -45,6 +45,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
@@ -2962,6 +2963,7 @@ public class Prodandes implements MessageListener {
             stmt1.close();
 
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            System.out.println(jO.get("fechaEsperada").toString());
             java.util.Date date = format.parse(jO.get("fechaEsperada").toString().substring(0, 10));
             System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
             Calendar cEsp = new GregorianCalendar();
