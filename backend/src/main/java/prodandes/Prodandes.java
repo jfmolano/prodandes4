@@ -66,7 +66,7 @@ public class Prodandes implements MessageListener {
     private Session s;
     private Destination d;
     private MessageConsumer mc;
-    private ArrayList<String> buzon = new ArrayList<String>();
+    public static ArrayList<String> buzon;
 
     // -------------------------------------------------
     // Requerimientos Funcionales
@@ -110,7 +110,7 @@ public class Prodandes implements MessageListener {
             String fechaEntrega = c.get(GregorianCalendar.DAY_OF_MONTH) + "-"
                     + (c.get(GregorianCalendar.MONTH) + 2) + "-" + c.get(GregorianCalendar.YEAR);
             if (rsx.next()) {
-                
+
                 int id_cliente = Integer.parseInt(sId_cliente);
                 System.out.println("FEcha actual " + fechaSolicitud);
                 String sql = "select max (id) as MAXIMO from PEDIDO_PRODUCTO";
@@ -334,6 +334,22 @@ public class Prodandes implements MessageListener {
                 env.enviar(mensaje);
                 env.close();
                 System.out.println("Mensaje a enviar " + mensaje);
+
+                Long milis = System.currentTimeMillis();
+                while (System.currentTimeMillis() - milis < 10000) {
+                    for (int i = 0; i < buzon.size(); i++) {
+                        System.out.println("Entro a buzon");
+                        if (buzon.get(i).startsWith("RF18R-")) {
+                            // RF18R-numeroConf-Estado
+                            String[] s = buzon.get(i).split("-");
+                            jRespuesta = new JSONObject();
+                            jRespuesta.put("id_pedido", s[1]);
+                            jRespuesta.put("Respuesta", s[2]);
+                            buzon.remove(i);
+                            return jRespuesta;
+                        }
+                    }
+                }
                 jRespuesta.put("Respuesta", resp);
                 return jRespuesta;
             }
@@ -2831,7 +2847,7 @@ public class Prodandes implements MessageListener {
         this.s = ((javax.jms.Connection) this.c).createSession(false, Session.AUTO_ACKNOWLEDGE);
         mc = s.createConsumer(d);
         this.mc.setMessageListener(this);
-
+        buzon = new ArrayList<String>();
         return "Inicializo bien";
     }
 
@@ -3352,7 +3368,7 @@ public class Prodandes implements MessageListener {
             }
 
             cerrarConexion();
-            
+
             return sReturn;
         } catch (Exception e) {
             rollback();
