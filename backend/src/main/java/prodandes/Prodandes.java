@@ -44,7 +44,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -66,7 +66,7 @@ public class Prodandes implements MessageListener {
     private Session s;
     private Destination d;
     private MessageConsumer mc;
-    private ArrayList<String> buzon;
+    private ArrayList<String> buzon = new ArrayList<String>();
 
     // -------------------------------------------------
     // Requerimientos Funcionales
@@ -2859,7 +2859,7 @@ public class Prodandes implements MessageListener {
         }
 
     }
-
+    
     public JSONObject registrarPedido2(JSONObject jO) throws Exception {
         try {
             JSONObject jRespuesta = new JSONObject();
@@ -3129,5 +3129,33 @@ public class Prodandes implements MessageListener {
         st.close();
         cerrarConexion();
         return "Bien";
+    }
+    
+    @GET
+    @Path("/metodoPrueba")
+    public String metodoPrueba() {
+        try {
+            Send env = new Send();
+            env.enviar("pj-pe");
+            System.out.println("Bien");
+        
+        org.json.JSONObject jRespuesta;
+        Long milis = System.currentTimeMillis();
+        org.json.JSONArray jArray = new org.json.JSONArray();
+                while (System.currentTimeMillis() - milis < 10000) {
+                    for (int i = 0; i < buzon.size(); i++) {
+                        if( buzon.get(i).startsWith("jp-r")){
+                           String[] arregloTexto = buzon.get(i).split("::");
+                           String texto = arregloTexto[1];
+                           jRespuesta = new org.json.JSONObject(texto);
+                           jArray = jRespuesta.getJSONArray("arreglo");
+                        }
+                    }
+                }
+        return "Retorna "+jArray.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return("Mal");
+        }
     }
 }
