@@ -279,6 +279,7 @@ public class Prodandes implements MessageListener {
                                     + "/" + cEsp.get(GregorianCalendar.YEAR);
 
                             env.enviar("RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente);
+                            env.close();
                             JSONObject jElm = new JSONObject();
                             jElm.put("id_pedido", id_pedido);
                             cancelarPedido(jElm);
@@ -291,6 +292,7 @@ public class Prodandes implements MessageListener {
                                 + "/" + cEsp.get(GregorianCalendar.YEAR);
 
                         env.enviar("RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente);
+                        env.close();
                         JSONObject jElm = new JSONObject();
                         jElm.put("id_pedido", id_pedido);
                         cancelarPedido(jElm);
@@ -329,6 +331,7 @@ public class Prodandes implements MessageListener {
 
                 String mensaje = "RF18-" + sFechaEnv + "-" + nombreProducto + "-" + cantidad + "-" + id_cliente;
                 env.enviar(mensaje);
+                env.close();
                 System.out.println("Mensaje a enviar " + mensaje);
                 jRespuesta.put("Respuesta", resp);
                 return jRespuesta;
@@ -2701,7 +2704,7 @@ public class Prodandes implements MessageListener {
             String mensaje = "RC12-" + criterio + "-" + valor + "-" + fecha1Env + "-" + fecha2Env;
             System.out.println("Mensaje a enviar " + mensaje);
             send.enviar(mensaje);
-
+            send.close();
             if (criterio.equals("materia prima")) {
 
                 Statement st = con.createStatement();
@@ -2798,10 +2801,10 @@ public class Prodandes implements MessageListener {
                 for (int i = 0; i < buzon.size(); i++) {
                     if (buzon.get(i).startsWith("RFC12R$")) {
                         // RFC12$elemento1Tupla1-elemento2Tupla1-elemento3Tupla1/elemento1Tupla2-elemento2Tupla2
-                        
+
                         String str = buzon.get(i).substring(7);
                         buzon.remove(i);
-                        jreturn.put("otraLista",str );
+                        jreturn.put("otraLista", str);
                     }
                 }
             }
@@ -2866,7 +2869,7 @@ public class Prodandes implements MessageListener {
 
                 Send env = new Send();
                 env.enviar("RF18R-" + jO.get("id_pedido") + "-" + jO.get("Respuesta"));
-
+                env.close();
             } else if (txt.startsWith("RF18R-")) {
 
                 buzon.add(txt);
@@ -2874,9 +2877,38 @@ public class Prodandes implements MessageListener {
                 System.out.println("Entro a jp-pe");
                 Send env = new Send();
                 env.enviar(darEtapasCuentaJose());
+                env.close();
             } else if (txt.equals("jp-r")) {
                 System.out.println("Entro a jp-r");
                 buzon.add(txt);
+            } else if (txt.equals("RFC12R$")) {
+                System.out.println("Entro a RFC12R$");
+                buzon.add(txt);
+            } else if (txt.equals("RC12-")) {
+                System.out.println("Entro a RC12-");
+                //RC12-solicitud-id-fechaInicial-FechaFinal
+                String s[] = txt.split("-");
+                String criterio = s[1];
+                String valor = s[2];
+                String fecha[] = s[3].split("/");
+                Calendar c = new GregorianCalendar(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]));
+                Date fechaI = c.getTime();
+                fecha = s[4].split("/");
+                c = new GregorianCalendar(Integer.parseInt(fecha[2]), Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]));
+                Date fechaF = c.getTime();
+
+                JSONObject jParam = new JSONObject();
+                jParam.put("criterio", criterio);
+                jParam.put("valor", valor);
+                jParam.put("fecha1", fechaI);
+                jParam.put("fecha2", fechaF);
+                String mensaje = consultarEtapasRangoFechaRFC8y9AEnviar(jParam);
+                System.out.println("Respuesta a enviar RFC12: " + mensaje);
+                //Enviar mis etapas
+                Send send = new Send();
+                send.enviar("RFC12$" + mensaje);
+                send.close();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2889,6 +2921,7 @@ public class Prodandes implements MessageListener {
         try {
             Send env = new Send();
             env.enviar("Mensaje de Jonathan y Francisco");
+            env.close();
             return "Bien";
 
         } catch (Exception e) {
@@ -3175,6 +3208,7 @@ public class Prodandes implements MessageListener {
         try {
             Send env = new Send();
             env.enviar("pj-pe");
+            env.close();
             System.out.println("Bien");
 
             org.json.JSONObject jRespuesta;
@@ -3195,5 +3229,134 @@ public class Prodandes implements MessageListener {
             e.printStackTrace();
             return ("Mal");
         }
+    }
+
+    public String consultarEtapasRangoFechaRFC8y9AEnviar(JSONObject jP) throws Exception {
+        try {
+            abrirConexion();
+            String sReturn = "";
+
+            String igualdad = (jP.get("igualdad").toString().equals("SI")) ? "=" : "!=";
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = format.parse(jP.get("fecha1").toString().substring(0, 10));
+            System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+            Calendar cEsp = new GregorianCalendar();
+            cEsp.setTime(date);
+
+            String fecha1 = cEsp.get(GregorianCalendar.DAY_OF_MONTH) + "-" + (cEsp.get(GregorianCalendar.MONTH) + 1) + "-"
+                    + cEsp.get(GregorianCalendar.YEAR);
+            String fecha1Env = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + (cEsp.get(GregorianCalendar.DAY_OF_MONTH)) + "/"
+                    + cEsp.get(GregorianCalendar.YEAR);
+
+            date = format.parse(jP.get("fecha2").toString().substring(0, 10));
+            System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+            cEsp = new GregorianCalendar();
+            cEsp.setTime(date);
+
+            String fecha2 = cEsp.get(GregorianCalendar.DAY_OF_MONTH) + "-" + (cEsp.get(GregorianCalendar.MONTH) + 1) + "-"
+                    + cEsp.get(GregorianCalendar.YEAR);
+            String fecha2Env = (cEsp.get(GregorianCalendar.MONTH) + 1) + "/" + (cEsp.get(GregorianCalendar.DAY_OF_MONTH)) + "/"
+                    + cEsp.get(GregorianCalendar.YEAR);
+
+            String criterio = jP.get("criterio").toString();
+            String valor = jP.get("valor").toString();
+
+            // RC12-solicitud-id-fechaInicial-FechaFinal
+            if (criterio.equals("materia prima")) {
+
+                Statement st = con.createStatement();
+                String sql = "select* from "
+                        + "(select * from materias_primas_producto where id_materia_prima" + igualdad + "'" + valor + "') "
+                        + " inner join "
+                        + " (select * from "
+                        + "  (select codigo_secuencia from ETAPA_FECHA where FECHA>=TO_DATE('" + fecha1 + "','dd-mm-yyyy') "
+                        + "AND FECHA<=TO_DATE('" + fecha2 + "','dd-mm-yyyy') "
+                        + "  group by CODIGO_SECUENCIA)c  "
+                        + "   inner join "
+                        + "   ETAPA_DE_PRODUCCION "
+                        + "   on ETAPA_DE_PRODUCCION.numero_secuencia=c.codigo_secuencia) "
+                        + "  on "
+                        + "  id_producto = nombre_producto";
+                System.out.println("RFC8 ----------- QUERY\n" + sql);
+
+                ResultSet rs = st.executeQuery(sql);
+
+                sReturn += "id_producto-id_etapa-descripcion-numero_etapa-materia_prima";
+                while (rs.next()) {
+
+                    sReturn += "/" + rs.getString("id_producto") + "-" + rs.getInt("numero_secuencia") + "-" + rs.getString("descripcion") + "-"
+                            + rs.getInt("etapa") + "-" + rs.getString("id_materia_prima");
+                }
+            } else if (criterio.equals("tipo material")) {
+                Statement st = con.createStatement();
+                String sql = "select* from      \n"
+                        + "      (select id_producto,tipo  from MATERIA_PRIMA inner join MATERIAS_PRIMAS_PRODUCTO on "
+                        + "NOMBRE=ID_MATERIA_PRIMA \n"
+                        + "                  where tipo" + igualdad + "'" + valor + "' \n"
+                        + "                  )\n"
+                        + "      inner join \n"
+                        + "      (select * from \n"
+                        + "            (select codigo_secuencia from ETAPA_FECHA where FECHA>=TO_DATE('" + fecha1 + "','dd-mm-yyyy') "
+                        + "AND FECHA<=TO_DATE('" + fecha2 + "','dd-mm-yyyy') \n"
+                        + "                      group by CODIGO_SECUENCIA)c \n"
+                        + "            inner join\n"
+                        + "            ETAPA_DE_PRODUCCION\n"
+                        + "            on ETAPA_DE_PRODUCCION.numero_secuencia=c.codigo_secuencia)\n"
+                        + "      on\n"
+                        + "      id_producto = nombre_producto";
+                System.out.println("RFC8 ----------- QUERY\n" + sql);
+
+                ResultSet rs = st.executeQuery(sql);
+                sReturn += "id_producto-id_etapa-descripcion-numero_etapa-tipo_material";
+                while (rs.next()) {
+
+                    sReturn += "/" + rs.getString("id_producto") + "-" + rs.getInt("numero_secuencia") + "-" + rs.getString("descripcion") + "-"
+                            + rs.getInt("etapa") + "-" + rs.getString("tipo");
+                }
+
+            } else if (criterio.equals("pedido")) {
+                Statement st = con.createStatement();
+                String sql = "select* from      \n"
+                        + "      (select id_producto,id_pedido from ITEM inner join MATERIAS_PRIMAS_PRODUCTO on "
+                        + "ITEM.NOMBRE_PRODUCTO=MATERIAS_PRIMAS_PRODUCTO.ID_PRODUCTO\n"
+                        + "        where ITEM.ID_PEDIDO" + igualdad + valor + "\n"
+                        + "                  )\n"
+                        + "      inner join \n"
+                        + "      (select * from \n"
+                        + "            (select codigo_secuencia from ETAPA_FECHA where FECHA>=TO_DATE('" + fecha1 + "','dd-mm-yyyy') "
+                        + "AND FECHA<=TO_DATE('" + fecha2 + "','dd-mm-yyyy') \n"
+                        + "                      group by CODIGO_SECUENCIA)c \n"
+                        + "            inner join\n"
+                        + "            ETAPA_DE_PRODUCCION\n"
+                        + "            on ETAPA_DE_PRODUCCION.numero_secuencia=c.codigo_secuencia)\n"
+                        + "      on\n"
+                        + "      id_producto = nombre_producto";
+                System.out.println("RFC8 ----------- QUERY\n" + sql);
+
+                ResultSet rs = st.executeQuery(sql);
+
+                sReturn += "id_producto-id_etapa-descripcion-numero_etapa-id_pedido";
+                while (rs.next()) {
+//                    JSONObject jO = new JSONObject();
+//                    jO.put("id_producto", rs.getString("id_producto"));
+//                    jO.put("id_etapa", rs.getInt("numero_secuencia"));
+//                    jO.put("descripcion", rs.getString("descripcion"));
+//                    jO.put("numero_etapa", rs.getInt("etapa"));
+//                    jO.put("id_pedido", rs.getInt("id_pedido"));
+//                    jResp.add(jO);
+                    sReturn += "/" + rs.getString("id_producto") + "-" + rs.getInt("numero_secuencia") + "-" + rs.getString("descripcion") + "-"
+                            + rs.getInt("etapa") + "-" + rs.getString("id_pedido");
+                }
+
+            }
+
+            cerrarConexion();
+            
+            return sReturn;
+        } catch (Exception e) {
+            rollback();
+            throw e;
+        }
+
     }
 }
