@@ -2975,8 +2975,8 @@ public class Prodandes implements MessageListener {
             System.out.println("Fecha: " + sFecha);
 
             String nombreProducto = jO.get("nombre").toString();
-            int cantidad = (int) jO.get("cantidad");
-            int id_cliente = (int) jO.get("id_cliente");
+            int cantidad = Integer.parseInt(jO.get("cantidad").toString());
+            int id_cliente = Integer.parseInt(jO.get("id_cliente").toString());
 
             Calendar c = new GregorianCalendar();
             String fechaSolicitud = c.get(GregorianCalendar.DAY_OF_MONTH) + "-"
