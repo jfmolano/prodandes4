@@ -284,7 +284,7 @@ public class Prodandes implements MessageListener {
                             env.close();
                             JSONObject jElm = new JSONObject();
                             jElm.put("id_pedido", id_pedido);
-                            cancelarPedido(jElm);
+//                            cancelarPedido(jElm);
                         }
                     } else {
 
@@ -297,7 +297,7 @@ public class Prodandes implements MessageListener {
                         env.close();
                         JSONObject jElm = new JSONObject();
                         jElm.put("id_pedido", id_pedido);
-                        cancelarPedido(jElm);
+//                        cancelarPedido(jElm);
                     }
                 }
                 cerrarConexion();
