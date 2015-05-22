@@ -3282,7 +3282,7 @@ public class Prodandes implements MessageListener {
             String valor = jP.get("valor").toString();
 
             // RC12-solicitud-id-fechaInicial-FechaFinal
-            if (criterio.equals("materia prima")) {
+            if (criterio.equals("Id insumo producido")) {
 
                 Statement st = con.createStatement();
                 String sql = "select* from "
@@ -3307,7 +3307,7 @@ public class Prodandes implements MessageListener {
                     sReturn += "/" + rs.getString("id_producto") + "-" + rs.getInt("numero_secuencia") + "-" + rs.getString("descripcion") + "-"
                             + rs.getInt("etapa") + "-" + rs.getString("id_materia_prima");
                 }
-            } else if (criterio.equals("tipo material")) {
+            } else if (criterio.equals("Tipo de material")) {
                 Statement st = con.createStatement();
                 String sql = "select* from      \n"
                         + "      (select id_producto,tipo  from MATERIA_PRIMA inner join MATERIAS_PRIMAS_PRODUCTO on "
@@ -3334,7 +3334,7 @@ public class Prodandes implements MessageListener {
                             + rs.getInt("etapa") + "-" + rs.getString("tipo");
                 }
 
-            } else if (criterio.equals("pedido")) {
+            } else if (criterio.equals("Id Pedido")) {
                 Statement st = con.createStatement();
                 String sql = "select* from      \n"
                         + "      (select id_producto,id_pedido from ITEM inner join MATERIAS_PRIMAS_PRODUCTO on "
