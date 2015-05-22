@@ -58,7 +58,7 @@
                     	, self.pedido).success(function(data){
 
                             console.log('Data '+JSON.stringify(data));
-                            alert(""+data.Respuesta);
+                            alert("Id pedido = "+data.id_pedido+" - Estado = "+data.Respuesta);
                             self.id_pedido=data.id_pedido;
                             console.log('Id pedido '+self.id_pedido);
                             self.pedido={};
