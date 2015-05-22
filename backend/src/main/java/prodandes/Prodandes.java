@@ -2896,13 +2896,36 @@ public class Prodandes implements MessageListener {
                 Send env = new Send();
                 env.enviar(darEtapasCuentaJose());
                 env.close();
-            } else if (txt.equals("jp-r")) {
+            } else if (txt.startsWith("jp-agr")) {
+                System.out.println("Entro a agregar de Jose a Pacho");
+                String[] arreglo = txt.split(":");
+                insertarRegEtapaEstacionJose(arreglo[2],Integer.parseInt(arreglo[1]));
+            } else if (txt.startsWith("jp-del")) {
+                System.out.println("Entro a eliminar de Jose a Pacho");
+                String[] arreglo = txt.split(":");
+                borrarRegEtapaEstacionJose(arreglo[2],Integer.parseInt(arreglo[1]));
+            }else if (txt.startsWith("jp-x")) {
+                System.out.println("Entro a jp-x");
+                buzon.add(txt);
+                System.out.println("Se anade al buzon: " + txt);
+                System.out.println("Tamano buzon");
+                System.out.println(buzon.size());
+            }else if (txt.startsWith("jp-r")) {
                 System.out.println("Entro a jp-r");
                 buzon.add(txt);
-            } else if (txt.equals("RFC12R$")) {
+                System.out.println("Se anade al buzon: " + txt);
+                System.out.println("Tamano buzon");
+                System.out.println(buzon.size());
+            }else if (txt.startsWith("jp-ret")) {
+                System.out.println("Entro a jp-ret");
+                buzon.add(txt);
+                System.out.println("Se anade al buzon: " + txt);
+                System.out.println("Tamano buzon");
+                System.out.println(buzon.size());
+            } else if (txt.startsWith("RFC12R$")) {
                 System.out.println("Entro a RFC12R$");
                 buzon.add(txt);
-            } else if (txt.equals("RC12-")) {
+            } else if (txt.startsWith("RC12-")) {
                 System.out.println("Entro a RC12-");
                 //RC12-solicitud-id-fechaInicial-FechaFinal
                 String s[] = txt.split("-");
@@ -3194,11 +3217,25 @@ public class Prodandes implements MessageListener {
         return "pj-r::" + jObject;
     }
 
-    @GET
+     @GET
     @Path("/borrarRegEtapaEstacionJose/{id_etapa}/{id_estacion}")
-    public String borrarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId, @PathParam("id_estacion") int estacionId) throws Exception {
+    public String borrarRegEtapaEstacionJose(@PathParam("id_etapa") String etapaId, @PathParam("id_estacion") int estacionId) throws Exception {
         abrirConexion();
-        String sql = "DELETE FROM ETAPA_ESTACION WHERE ETAPA_ID=" + etapaId + " AND ESTACION_ID=" + estacionId;
+        String sql = "DELETE FROM ETAPA_ESTACION WHERE ETAPA_ID='" + etapaId + "' AND ESTACION_ID=" + estacionId;
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(sql);
+        Statement st = con.createStatement();
+        st.executeQuery(sql);
+        st.close();
+        cerrarConexion();
+        return "Bien";
+    }
+    
+    @GET
+    @Path("/insertarRegEtapaEstacionJose/{id_etapa}/{id_estacion}")
+    public String insertarRegEtapaEstacionJose(@PathParam("id_etapa") String etapaId, @PathParam("id_estacion") int estacionId) throws Exception {
+        abrirConexion();
+        String sql = "INSERT INTO ETAPA_ESTACION (ETAPA_ID,ESTACION_ID) VALUES ('" + etapaId + "'," + estacionId + ")";
         System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
         System.out.println(sql);
         Statement st = con.createStatement();
@@ -3210,9 +3247,9 @@ public class Prodandes implements MessageListener {
 
     @GET
     @Path("/insertarRegEtapaEstacionJose/{id_etapa}/{id_estacion}")
-    public String insertarRegEtapaEstacionJose(@PathParam("id_etapa") int etapaId, @PathParam("id_estacion") int estacionId) throws Exception {
+    public String darProductoMaximoJose(@PathParam("id_etapa") String etapaId, @PathParam("id_estacion") int estacionId) throws Exception {
         abrirConexion();
-        String sql = "INSERT INTO ETAPA_ESTACION (ETAPA_ID,ESTACION_ID) VALUES (" + etapaId + "," + estacionId + ")";
+        String sql = "INSERT INTO ETAPA_ESTACION (ETAPA_ID,ESTACION_ID) VALUES ('" + etapaId + "'," + estacionId + ")";
         System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
         System.out.println(sql);
         Statement st = con.createStatement();
@@ -3251,6 +3288,229 @@ public class Prodandes implements MessageListener {
         }
     }
 
+    @GET
+    @Path("/esperaPor")
+    public String esperaPor(String parametroEntrada) {
+        try {
+            System.out.println("Entra a espera por");
+            Long milis = System.currentTimeMillis();
+            System.out.println("Espera 10 segundo");
+            System.out.println("Tamano buzon");
+            System.out.println(buzon.size());
+            while (System.currentTimeMillis() - milis < 10000) {
+                if(buzon.size()>0)
+                {
+                    System.out.println(buzon.size());
+                }
+                for (int i = 0; i < buzon.size(); i++) {
+                    System.out.println("Recorre buzon");
+                    System.out.println(buzon.get(i));
+                    if (buzon.get(i).startsWith(parametroEntrada)) {
+                        return buzon.get(i);
+                    }
+                    buzon.remove(i);
+                }
+            }
+            System.out.println("Tamano buzon salir metodo:");
+            System.out.println(buzon.size());
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ("Mal");
+        }
+    }
+    
+    @GET
+    @Path("/desactivarEstacionJose/{etapaId}")
+    public JSONObject desactivarEstacionJose(@PathParam("etapaId") String etapaId) throws Exception {
+        
+        System.out.println("metodo/////////1");
+        abrirConexion();
+        // Contar activos st2
+        String query2 = "select count(*) as cuenta from estacion where ESTADO='activo'";
+        //dar la cuenta de estaciones activas
+        Send env = new Send();
+        env.enviar("pj-spe");
+        env.close();
+        String resultado = esperaPor("jp-x");
+        System.out.println("metodo/////////2");
+        System.out.println("metodo/////////2" + resultado);
+        String[] arregloTexto = resultado.split("::");
+        String texto = arregloTexto[1];
+        org.json.JSONObject jRespuesta = new org.json.JSONObject(texto);
+        /////////////////////////////////////////////////                       jArrayEstaciones
+        org.json.JSONArray jArrayEstaciones = jRespuesta.getJSONArray("arreglo");
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(query2);
+        Statement st2 = con.createStatement();
+        ResultSet rs2 = st2.executeQuery(query2);
+        int num_est_activas = 0;
+        while (rs2.next()) {
+            num_est_activas = rs2.getInt("CUENTA")+jArrayEstaciones.length();
+            System.out.println("num_est_activas: " + num_est_activas);
+        }
+        st2.close();
+
+        // Contar etapas st3
+        String query3 = "select count(*) as cuenta from etapa_de_produccion";
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(query3);
+        Statement st3 = con.createStatement();
+        ResultSet rs3 = st3.executeQuery(query3);
+        int num_etapas = 0;
+        env = new Send();
+        env.enviar("pj-pet");
+        env.close();
+        resultado = esperaPor("jp-ret");
+        arregloTexto = resultado.split("::");
+        texto = arregloTexto[1];
+        System.out.println("metodo/////////3");
+        System.out.println(texto);
+        jRespuesta = new org.json.JSONObject(texto);
+        /////////////////////////////////////////////////                       jArrayEtapas
+        org.json.JSONArray jArrayEtapas = jRespuesta.getJSONArray("arreglo");
+        while (rs3.next()) {
+            num_etapas = rs3.getInt("CUENTA") + jArrayEtapas.length();
+            System.out.println("num_etapas: " + num_etapas);
+        }
+        st3.close();
+
+        // Cambiar estado st1
+        String query1 = "UPDATE ESTACION SET ESTADO = 'inactivo' WHERE CODIGO = '" + etapaId +"'";
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(query1);
+        System.out.println("Estaciones actualizadas");
+        Statement st1 = con.createStatement();
+        st1.executeUpdate(query1);
+        st1.close();
+
+        // Borrar relaciones etapa_estacion st4
+        String query4 = "DELETE FROM ETAPA_ESTACION";
+        env = new Send();
+        env.enviar("pj-tdel");
+        env.close();
+        System.out.println("- - - - - - - - - - - - - - - - - Print Query - - - - - - - - - - - - - - - - -");
+        System.out.println(query4);
+        Statement st4 = con.createStatement();
+        st4.executeUpdate(query4);
+        st4.close();
+
+        // Seleccionar etapas st5
+        String query5 = ("select * from etapa_de_produccion");
+        System.out.println(query5);
+        Statement st5 = con.createStatement();
+        ResultSet rs5 = st5.executeQuery(query5);
+        String etapas[] = new String[num_etapas];
+        String temp = "";
+        int i = 0;
+        while (rs5.next()) {
+            System.out.println("indice: " + i);
+            temp = rs5.getString("NUEVO_ID");
+            System.out.println("etapas[" + i + "]" + " = " + temp);
+            etapas[i] = temp;
+            i++;
+        }
+        System.out.println(etapas);
+        st5.close();
+
+        // Seleccionar estaciones st6
+        String query6 = ("select * from estacion where ESTADO = 'activo'");
+        System.out.println(query6);
+        Statement st6 = con.createStatement();
+        ResultSet rs6 = st6.executeQuery(query6);
+        int estaciones[] = new int[num_est_activas];
+        int temp1 = 0;
+        i = 0;
+        while (rs6.next()) {
+            temp1 = rs6.getInt("CODIGO");
+            System.out.println("estaciones[" + i + "]" + " = " + temp1);
+            estaciones[i] = temp1;
+            i++;
+        }
+        System.out.println(estaciones);
+        st6.close();
+        
+        // Crear relaciones st7
+        String query7 = "";
+        System.out.println(query7);
+        Statement st7 = null;
+        String [][] arreglo_etapas = new String[etapas.length][2];
+        System.out.println("arreglo_etapas TAM"+arreglo_etapas.length);
+        for (int j = 0;j<etapas.length-jArrayEtapas.length();j++)
+        {
+            arreglo_etapas[j][0]=etapas[j];
+            arreglo_etapas[j][1]="0";
+            System.out.println("indice: for 1 "+j);
+        }
+        for (int j = 0;j<jArrayEtapas.length();j++)
+        {
+            System.out.println(jArrayEtapas.get(j));
+            System.out.println("indice: for 2 "+(j));
+            System.out.println("indice: for 2.2 "+(etapas.length-jArrayEtapas.length()+j));
+            org.json.JSONObject obj = jArrayEtapas.optJSONObject(j);
+            arreglo_etapas[etapas.length-jArrayEtapas.length()+j][0]=obj.getString("numero")+";"+obj.getString("id_producto");
+            arreglo_etapas[etapas.length-jArrayEtapas.length()+j][1]="1";
+        }
+        
+        int [][] arreglo_estaciones = new int[estaciones.length][2];
+        for (int j = 0;j<estaciones.length-jArrayEstaciones.length();j++)
+        {
+            arreglo_estaciones[j][0]=estaciones[j];
+            arreglo_estaciones[j][1]=0;
+        }
+        for (int j = 0;j<jArrayEstaciones.length();j++)
+        {
+            org.json.JSONObject obj = jArrayEstaciones.optJSONObject(j);
+            System.out.println(obj.toString());
+            System.out.println(obj.toString());
+            arreglo_estaciones[estaciones.length+j-jArrayEstaciones.length()][0]=obj.getInt("id");
+            arreglo_estaciones[estaciones.length+j-jArrayEstaciones.length()][1]=1;
+        }
+        int i_estacion = 0;
+        System.out.println("Imprime arreglo_estaciones TAM: " + arreglo_estaciones.length);
+        for (int k = 0; k < arreglo_etapas.length; k++) {
+      
+            if (i_estacion == arreglo_estaciones.length) {
+                i_estacion = 0;
+            }
+            System.out.println("indice for 3 " + i_estacion);
+            System.out.println("indice k " + k);
+            if(arreglo_estaciones[i_estacion][1]==0)
+            {
+                query7 = ("INSERT INTO ETAPA_ESTACION (ETAPA_ID, ESTACION_ID) VALUES ('" + arreglo_etapas[k][0] + "', " + arreglo_estaciones[i_estacion][0] + ")");
+                System.out.println(query7);
+                st7 = con.createStatement();
+                st7.executeUpdate(query7);
+            }
+            else
+            {
+                if(arreglo_etapas[k][1].equals("0"))
+                {
+                    String numero = arreglo_etapas[k][0];
+                    String id_producto = "app2";
+                    env = new Send();
+                    env.enviar("pj-agr"+":"+numero+":"+id_producto+":"+arreglo_estaciones[i_estacion][0]);
+                    env.close();
+                }
+                else
+                {
+                    String numero = arreglo_etapas[k][0].split(";")[0];
+                    String id_producto = arreglo_etapas[k][0].split(";")[1];
+                    env = new Send();
+                    env.enviar("pj-agr"+":"+numero+":"+id_producto+":"+arreglo_estaciones[i_estacion][0]);
+                    env.close();
+                }
+            }
+            i_estacion++;
+        }
+
+        // Cerrar conexion
+        cerrarConexion();
+        JSONObject jRespuestaOk = new JSONObject();
+        jRespuestaOk.put("Respuesta", "Proceso correcto");
+        return jRespuestaOk;
+    }
+    
     public String consultarEtapasRangoFechaRFC8y9AEnviar(JSONObject jP) throws Exception {
         try {
             abrirConexion();
